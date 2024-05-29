@@ -8,6 +8,7 @@ void agregar();
 void borrar();
 
 //holaaaaaaaaaaaaaa
+int hola
 int main() {
     int opcion;
     do {
