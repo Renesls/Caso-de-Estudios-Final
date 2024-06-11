@@ -4,91 +4,197 @@
 
 using namespace std;
 
-void agregar();
-void borrar();
+void Menu();
+void Agregar_Paquetes();
+void Borrar_Paquetes();
+void Actualizar_Paquetes();
+void Buscar_PaquetesID();
+void Buscar_PaquetesN();
+void Buscar_PaquetesR();
+void Historial_No();
+void Historial_Si();
+void Detalles_Paquete_No();
+void Detalles_Paquete_Si();
+void Iniciar_Sesion();
+void Registrar_Usuario();
+void Cambiar_Password();
 
-//holaaaaaaaaaaaaaa
-int hola
 int main() {
-    int opcion;
-    do {
-        cout << "Opciones del CRUD" << endl;
-        cout << "-----------------" << endl;
-        cout << "1. Agregar registro" << endl;
-        cout << "2. Leer registros" << endl;
-        cout << "3. Actualizar registro" << endl;
-        cout << "4. Borrar registro" << endl;
-        cout << "5. Consultar registro" << endl;
-        cout << "0. Salir" << endl;
-        cout << "Seleccione una opción: ";
-        cin >> opcion;
-        
-        switch(opcion) {
-            case 1: agregar(); break;
-            case 2: break;
-            case 3: break;
-            case 4: borrar(); break;
-            case 5:  break;
-            case 0: cout << "Saliendo..." << endl; break;
-            default: cout << "Opción no válida" << endl;
-        }
-    } while(opcion != 0);
-
-    return 0;
-}
-
-void agregar() {
-    int cuenta;
-    char nombre[20];
-    float saldo;
-    FILE *fp = fopen("credito.txt", "a");
     
-    if (fp == NULL) {
-        cout << "Error al abrir el archivo." << endl;
-        return;
+    int opc1;    
+    cout << "InterPack \n";
+    cout << "''''''''''''''''''\n"; 
+    cout << "Menu De Opciones\n";
+    cout << "1) Iniciar Sesion\n";
+    cout << "2) Registrar Sesion\n";
+    cout << "3) Salir\n";
+    cin >> opc1;
+
+    
+    switch (opc1)
+    {
+    case 1:
+        Iniciar_Sesion();
+        break;
+    case 2:
+        Registrar_Usuario();
+    default:
+        break;
     }
-
-    cout << "Ingrese número de cuenta: ";
-    cin >> cuenta;
-    cout << "Ingrese nombre: ";
-    cin >> nombre; // Lee el nombre directamente
-    cout << "Ingrese saldo: ";
-    cin >> saldo;
-
-    fprintf(fp, "%d %s %.2f\n", cuenta, nombre, saldo);
-    fclose(fp);
-    cout << "Registro agregado exitosamente." << endl;
+    
 }
 
-void borrar() {
-    int cuenta, cuentaBorrar;
-    char nombre[20];
-    float saldo;
-    bool encontrado = false;
+void Menu(){
+    int opc;
+    while (opc != 8)
+    {
+        cout << "InterPack \n";
+        cout << "''''''''''''''''''\n"; 
+        cout << "Menu De Opciones\n";
+        cout << "1) Agregar Nuevo Paquete\n";
+        cout << "2) Borrar Paquete\n";
+        cout << "3) Actualizar Paquete\n";
+        cout << "4) Buscar Paquetes\n";
+        cout << "5) Historial de Paquetes\n";
+        cout << "6) Detalle de paquetes\n";
+        cout << "7) Registrar Usuario\n";
+        cout << "8) Ajustes\n";
+        cout << "9) Salir\n";
+        cin >> opc;
 
-    FILE *fp = fopen("credito.txt", "r+");
-    if (!fp) {
-        cerr << "Error al abrir el archivo." << endl;
-        return;
-    }
+        switch (opc)
+        {
+        case 1:
+            Agregar_Paquetes();
+            break;
+        
+        case 2:
+            Borrar_Paquetes();
+            break;
+        case 3:
+            Actualizar_Paquetes();
+            break;
+        case 4:
+            int bsq;
+            system("cls");
+            cout << "Desea Buscar el Paquete por:\n";
+            cout << "1) Paquete Por ID\n";
+            cout << "2) Paquete Por Nombre\n";
+            cout << "3) Paquete Por Remitente\n";
+            cout << "4) Salir";
+            cin >> bsq;
+            switch (bsq)
+            {
+            case 1:
+                Buscar_PaquetesID();
+                break;
+            case 2:
+                Buscar_PaquetesN();
+                break;
+            case 3:
+                Buscar_PaquetesR();
+                break;
+            case 4:
+                main();
+                break;                
+            default:
+                break;
+            }
+            break;
+        case 5:
+            int Hist;
+            system("cls");
+            cout << "Historial de paquetes:\n";
+            cout << "1) Paquetes Entregados\n";
+            cout << "2) Paquetes No Entregados\n";
+            cout << "3) Salir\n";
+            cin >> Hist;
+            switch (Hist)
+            {
+            case 1:
+                Historial_Si();
+                break;
+            case 2:
+                Historial_No();
+                break;
+            case 3:
+                main();
+                break;    
+            default:
+                break;
+            }
+            break;
 
-    cout << "Ingrese número de cuenta a borrar: ";
-    cin >> cuentaBorrar;
-
-    while (fscanf(fp, "%d %19s %f", &cuenta, nombre, &saldo) != EOF) {
-        if (cuenta != cuentaBorrar) {
-            fprintf(fp, "%d %s %.2f\n", cuenta, nombre, saldo);
-        } else {
-            encontrado = true;
+        case 6:
+            int Dtl;
+            system("cls");
+            cout << "Detalles de Paquetes:\n";
+            cout << "1) Paquetes Entregados:\n";
+            cout << "2) Paquetes No Entregados:\n";
+            cout << "3) Salir";
+            cin >> Dtl;
+            switch (Dtl)
+            {
+            case 1:
+                Detalles_Paquete_No();
+                break;
+            case 2:
+                Detalles_Paquete_Si();
+                break;
+            case 3:
+                main();
+                break;        
+            default:
+                break;
+            }
+            break;
+        case 7:
+            Registrar_Usuario();
+            break;
+        case 8:
+            int Set;
+            system("cls");
+            cout << "Ajustes:\n";
+            cout << "1) Cambiar Password:\n";
+            cout << "2) Info del app:\n";
+            cout << "3) Salir";
+            cin >> Set;
+            switch (Set)
+            {
+            case 1:
+                Cambiar_Password();
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                main();
+                break;                
+            default:
+                break;
+            }
+            break;
+        case 9:
+            
+            break;                        
+        default:
+            break;
         }
-    }
-
-    fclose(fp);
 
 
-    if (encontrado) {
-        cout << "Registro borrado exitosamente." << endl;
-    } else {
-        cout << "Registro no encontrado." << endl;
     }
 }
+
+void Agregar_Paquetes(){}
+void Borrar_Paquetes(){}
+void Actualizar_Paquetes(){}
+void Buscar_PaquetesID(){}
+void Buscar_PaquetesN(){}
+void Buscar_PaquetesR(){}
+void Historial_No(){}
+void Historial_Si(){}
+void Detalles_Paquete_No(){}
+void Detalles_Paquete_Si(){}
+void Iniciar_Sesion(){}
+void Registrar_Usuario(){}
+void Cambiar_Password(){}
