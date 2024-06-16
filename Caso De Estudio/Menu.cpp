@@ -4,6 +4,18 @@
 
 using namespace std;
 
+struct Paquete {
+    int id;
+    char nombre[50];
+    char descripcion[100];
+    char origen[50];
+    char destino[50];
+    char remitente[50];
+};
+
+Paquete* paquetes[100];
+int paqueteCount = 0;
+
 void Menu();
 void Agregar_Paquetes();
 void Borrar_Paquetes();
@@ -30,23 +42,26 @@ int main() {
     cout << "3) Salir\n";
     cin >> opc1;
 
-    
     switch (opc1)
     {
     case 1:
-        Iniciar_Sesion();
+        Menu();
         break;
     case 2:
         Registrar_Usuario();
+        break;
+    case 3:
+        return 0;
     default:
         break;
     }
     
+    return 0;
 }
 
 void Menu(){
     int opc;
-    while (opc != 8)
+    while (opc != 9)
     {
         cout << "InterPack \n";
         cout << "''''''''''''''''''\n"; 
@@ -67,7 +82,6 @@ void Menu(){
         case 1:
             Agregar_Paquetes();
             break;
-        
         case 2:
             Borrar_Paquetes();
             break;
@@ -175,18 +189,81 @@ void Menu(){
             }
             break;
         case 9:
-            
+            exit(0);
             break;                        
         default:
             break;
         }
-
-
     }
 }
 
-void Agregar_Paquetes(){}
-void Borrar_Paquetes(){}
+void Agregar_Paquetes() {
+    Paquete* nuevoPaquete = new Paquete;
+    nuevoPaquete->id = paqueteCount + 1;  
+
+    cout << "Ingrese nombre del paquete: ";
+    cin >> nuevoPaquete->nombre;
+    cout << "Ingrese descripcion del paquete: ";
+    cin >> nuevoPaquete->descripcion;
+    cout << "Ingrese origen del paquete: ";
+    cin >> nuevoPaquete->origen;
+    cout << "Ingrese destino del paquete: ";
+    cin >> nuevoPaquete->destino;
+    cout << "Ingrese remitente del paquete: ";
+    cin >> nuevoPaquete->remitente;
+
+    paquetes[paqueteCount] = nuevoPaquete;
+    paqueteCount++;
+    cout << "Paquete agregado exitosamente con ID " << nuevoPaquete->id << ".\n";
+}
+
+void Borrar_Paquetes() {
+    if (paqueteCount == 0) {
+        cout << "No se encontró ningún paquete.\n";
+        Menu();
+        return;
+    }
+
+    cout << "Lista de paquetes:\n";
+    for (int i = 0; i < paqueteCount; i++) {
+        cout << "ID: " << paquetes[i]->id 
+             << ", Nombre: " << paquetes[i]->nombre 
+             << ", Descripcion: " << paquetes[i]->descripcion 
+             << ", Origen: " << paquetes[i]->origen 
+             << ", Destino: " << paquetes[i]->destino 
+             << ", Remitente: " << paquetes[i]->remitente << "\n";
+    }
+
+    int idEliminar;
+    cout << "Ingrese ID del paquete que desea eliminar: ";
+    cin >> idEliminar;
+
+    bool encontrado = false;
+    for (int i = 0; i < paqueteCount; i++) {
+        if (paquetes[i]->id == idEliminar) {
+            encontrado = true;
+            cout << "¿Está seguro que desea eliminar el paquete? (s/n): ";
+            char confirmacion;
+            cin >> confirmacion;
+            if (confirmacion == 's' || confirmacion == 'S') {
+                delete paquetes[i];
+                for (int j = i; j < paqueteCount - 1; j++) {
+                    paquetes[j] = paquetes[j + 1];
+                }
+                paqueteCount--;
+                cout << "Paquete eliminado exitosamente.\n";
+            } else {
+                cout << "Eliminación cancelada.\n";
+            }
+            break;
+        }
+    }
+    if (!encontrado) {
+        cout << "Paquete no encontrado.\n";
+    }
+}
+
+
 void Actualizar_Paquetes(){}
 void Buscar_PaquetesID(){}
 void Buscar_PaquetesN(){}
