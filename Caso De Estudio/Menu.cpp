@@ -1,8 +1,16 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <string.h>
 
 using namespace std;
+
+struct Fecha {
+    int dia;
+    int mes;
+    int year;
+};
 
 struct Paquete {
     int id;
@@ -11,6 +19,8 @@ struct Paquete {
     char origen[50];
     char destino[50];
     char remitente[50];
+    Fecha fecha_actual;
+    Fecha fecha_entrega;
 };
 
 Paquete* paquetes[100];
@@ -32,10 +42,9 @@ void Registrar_Usuario();
 void Cambiar_Password();
 
 int main() {
-    
     int opc1;    
     cout << "InterPack \n";
-    cout << "''''''''''''''''''\n"; 
+    cout << "''''''''''''''''''''\n"; 
     cout << "Menu De Opciones\n";
     cout << "1) Iniciar Sesion\n";
     cout << "2) Registrar Sesion\n";
@@ -64,7 +73,7 @@ void Menu(){
     while (opc != 9)
     {
         cout << "InterPack \n";
-        cout << "''''''''''''''''''\n"; 
+        cout << "''''''''''''''''''''\n"; 
         cout << "Menu De Opciones\n";
         cout << "1) Agregar Nuevo Paquete\n";
         cout << "2) Borrar Paquete\n";
@@ -89,119 +98,88 @@ void Menu(){
             Actualizar_Paquetes();
             break;
         case 4:
-            int bsq;
-            system("cls");
-            cout << "Desea Buscar el Paquete por:\n";
-            cout << "1) Paquete Por ID\n";
-            cout << "2) Paquete Por Nombre\n";
-            cout << "3) Paquete Por Remitente\n";
-            cout << "4) Salir";
-            cin >> bsq;
-            switch (bsq)
-            {
-            case 1:
-                Buscar_PaquetesID();
-                break;
-            case 2:
-                Buscar_PaquetesN();
-                break;
-            case 3:
-                Buscar_PaquetesR();
-                break;
-            case 4:
-                main();
-                break;                
-            default:
-                break;
+            int busqueda;
+            cout << "1) Buscar por ID\n";
+            cout << "2) Buscar por Nombre\n";
+            cout << "3) Buscar por Remitente\n";
+            cin >> busqueda;
+            switch (busqueda) {
+                case 1:
+                    Buscar_PaquetesID();
+                    break;
+                case 2:
+                    Buscar_PaquetesN();
+                    break;
+                case 3:
+                    Buscar_PaquetesR();
+                    break;
+                default:
+                    cout << "Opcion invalida\n";
+                    break;
             }
             break;
         case 5:
-            int Hist;
-            system("cls");
-            cout << "Historial de paquetes:\n";
-            cout << "1) Paquetes Entregados\n";
-            cout << "2) Paquetes No Entregados\n";
-            cout << "3) Salir\n";
-            cin >> Hist;
-            switch (Hist)
-            {
-            case 1:
-                Historial_Si();
-                break;
-            case 2:
-                Historial_No();
-                break;
-            case 3:
-                main();
-                break;    
-            default:
-                break;
+            int historial;
+            cout << "1) Historial No Entregados\n";
+            cout << "2) Historial Entregados\n";
+            cin >> historial;
+            switch (historial) {
+                case 1:
+                    Historial_No();
+                    break;
+                case 2:
+                    Historial_Si();
+                    break;
+                default:
+                    cout << "Opcion invalida \n";
+                    break;
             }
             break;
-
         case 6:
-            int Dtl;
-            system("cls");
-            cout << "Detalles de Paquetes:\n";
-            cout << "1) Paquetes Entregados:\n";
-            cout << "2) Paquetes No Entregados:\n";
-            cout << "3) Salir";
-            cin >> Dtl;
-            switch (Dtl)
-            {
-            case 1:
-                Detalles_Paquete_No();
-                break;
-            case 2:
-                Detalles_Paquete_Si();
-                break;
-            case 3:
-                main();
-                break;        
-            default:
-                break;
+            int detalles;
+            cout << "1) Detalle No Entregados \n";
+            cout << "2) Detalle Entregados \n";
+            cin >> detalles;
+            switch (detalles) {
+                case 1:
+                    Detalles_Paquete_No();
+                    break;
+                case 2:
+                    Detalles_Paquete_Si();
+                    break;
+                default:
+                    cout << "Opcion invalida \n";
+                    break;
             }
             break;
         case 7:
             Registrar_Usuario();
             break;
         case 8:
-            int Set;
-            system("cls");
-            cout << "Ajustes:\n";
-            cout << "1) Cambiar Password:\n";
-            cout << "2) Info del app:\n";
-            cout << "3) Salir";
-            cin >> Set;
-            switch (Set)
-            {
-            case 1:
-                Cambiar_Password();
-                break;
-            case 2:
-                
-                break;
-            case 3:
-                main();
-                break;                
-            default:
-                break;
-            }
+            Cambiar_Password();
             break;
         case 9:
-            exit(0);
-            break;                        
+            return;
         default:
+            cout << "Opcion invalida\n";
             break;
         }
     }
+}
+
+void ObtenerFechaActual(Fecha &fecha) {
+    time_t t = time(0);
+    struct tm *now = localtime(&t);
+    fecha.dia = now->tm_mday;
+    fecha.mes = now->tm_mon + 1;
+    fecha.year = now->tm_year + 1900;
 }
 
 void Agregar_Paquetes() {
     Paquete* nuevoPaquete = new Paquete;
     nuevoPaquete->id = paqueteCount + 1;  
 
-    cout << "Ingrese nombre del paquete: ";
+    cout << "Ingrese un nombre al paquete: ";
     cin >> nuevoPaquete->nombre;
     cout << "Ingrese descripcion del paquete: ";
     cin >> nuevoPaquete->descripcion;
@@ -212,15 +190,63 @@ void Agregar_Paquetes() {
     cout << "Ingrese remitente del paquete: ";
     cin >> nuevoPaquete->remitente;
 
+    ObtenerFechaActual(nuevoPaquete->fecha_actual);
+
+
+    cout << "Ingrese la fecha de entrega (dd mm aaaa): ";
+    cin >> nuevoPaquete->fecha_entrega.dia >> nuevoPaquete->fecha_entrega.mes >> nuevoPaquete->fecha_entrega.year;
+
+    
     paquetes[paqueteCount] = nuevoPaquete;
+
     paqueteCount++;
     cout << "Paquete agregado exitosamente con ID " << nuevoPaquete->id << ".\n";
 }
 
+bool FechaMenorIgual(Fecha fecha1, Fecha fecha2) {
+    if (fecha1.year < fecha2.year) return true;
+    if (fecha1.year > fecha2.year) return false;
+    if (fecha1.mes < fecha2.mes) return true;
+    if (fecha1.mes > fecha2.mes) return false;
+    if (fecha1.dia <= fecha2.dia) return true;
+    return false;
+}
+
+void Actualizar_Paquetes() {
+    if (paqueteCount == 0) {
+        cout << "No se encontró ningún paquete.\n";
+        return;
+    }
+
+    Fecha fechaActual;
+    ObtenerFechaActual(fechaActual);
+
+    cout << "Lista de paquetes:\n";
+    for (int i = 0; i < paqueteCount; i++) {
+        Paquete* paquete = paquetes[i];
+        cout << "ID: " << paquete->id << "\n"
+             << ", Nombre: " << paquete->nombre << "\n"
+             << ", Descripcion: " << paquete->descripcion << "\n"
+             << ", Origen: " << paquete->origen << "\n"
+             << ", Destino: " << paquete->destino << "\n"
+             << ", Remitente: " << paquete->remitente << "\n";
+        
+        cout << "Fecha de Entrega: " << paquete->fecha_entrega.dia << "/"
+             << paquete->fecha_entrega.mes << "/" << paquete->fecha_entrega.year << "\n";
+        
+        if (FechaMenorIgual(paquete->fecha_entrega, fechaActual)) {
+            cout << "El paquete ha llegado.\n";
+        } else {
+            cout << "El paquete no ha llegado.\n";
+        }
+    }
+    
+}
+
+
 void Borrar_Paquetes() {
     if (paqueteCount == 0) {
         cout << "No se encontró ningún paquete.\n";
-        Menu();
         return;
     }
 
@@ -263,15 +289,19 @@ void Borrar_Paquetes() {
     }
 }
 
+void Historial_No() {
+    
+}
+void Historial_Si() {
 
-void Actualizar_Paquetes(){}
-void Buscar_PaquetesID(){}
-void Buscar_PaquetesN(){}
-void Buscar_PaquetesR(){}
-void Historial_No(){}
-void Historial_Si(){}
-void Detalles_Paquete_No(){}
-void Detalles_Paquete_Si(){}
-void Iniciar_Sesion(){}
-void Registrar_Usuario(){}
-void Cambiar_Password(){}
+}
+
+
+void Buscar_PaquetesID() {}
+void Buscar_PaquetesN() {}
+void Buscar_PaquetesR() {}
+void Detalles_Paquete_No() {}
+void Detalles_Paquete_Si() {}
+void Iniciar_Sesion() {}
+void Registrar_Usuario() {}
+void Cambiar_Password() {}
