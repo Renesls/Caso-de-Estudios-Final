@@ -273,5 +273,27 @@ void Historial_Si(){}
 void Detalles_Paquete_No(){}
 void Detalles_Paquete_Si(){}
 void Iniciar_Sesion(){}
-void Registrar_Usuario(){}
+void Registrar_Usuario(){
+
+char usuario [50];
+char password [50];
+int edad;
+char nombre [50];
+FILE * ptrf;
+
+if ((ptrf = fopen("archivo.dat", "w"))== NULL){
+    printf("\nEl archivo no pudo ser abierto/creado");
+}else{
+   printf("Ingrese un nuevo usuario");
+   scanf("%s", usuario);
+   printf("Ingrese su password");
+   scanf("s", password);
+   printf("Ingrese su nombre");
+   scanf("s", nombre);
+   printf("Ingrese su edad");
+   scanf("d", edad);
+}
+
+
+}
 void Cambiar_Password(){}
