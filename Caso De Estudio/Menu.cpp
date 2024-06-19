@@ -205,7 +205,6 @@ void Agregar_Paquetes() {
     FILE *AgregarPaquete;
     FILE *IdFile;
 
-    // Leer el último ID desde el archivo
     IdFile = fopen("ID.txt", "r");
     if (IdFile != NULL) {
         fscanf(IdFile, "%d", &paquete.lastId);
@@ -265,7 +264,6 @@ void Agregar_Paquetes() {
 
         fclose(AgregarPaquete);
 
-        // Actualizar el archivo con el último ID
         IdFile = fopen("ID.txt", "w");
         if (IdFile != NULL) {
             fprintf(IdFile, "%d", paquete.id);
@@ -304,7 +302,6 @@ void Borrar_Paquetes() {
 
     while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
-        // Mostrar la información del paquete
         printf("ID: %d\n", paquete.id);
         printf("Nombre: %s\n", paquete.nombre);
         printf("Descripcion: %s\n", paquete.descripcion);
@@ -313,7 +310,6 @@ void Borrar_Paquetes() {
         printf("Remitente: %s\n", paquete.remitente);
         printf("Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
 
-        // Comparar la fecha de entrega con la fecha actual
         if (strcmp(paquete.Fecha_Entrega, fechaActual) > 0) {
             printf("El paquete aun no ha sido entregado\n");
         } else {
@@ -325,15 +321,12 @@ void Borrar_Paquetes() {
 
     fclose(archivo);
 
-    // Solicitar al usuario el ID del paquete a borrar
     printf("Ingrese el ID del paquete que desea borrar: ");
     cin >> idBorrar;
-    cin.ignore(); // Limpiar el buffer de entrada
-
-    // Mostrar confirmación
+    cin.ignore(); 
     printf("¿Está seguro de eliminar el paquete con ID %d? (s/n): ", idBorrar);
     cin >> confirmacion;
-    cin.ignore(); // Limpiar el buffer de entrada
+    cin.ignore(); 
 
     if (confirmacion == 's' || confirmacion == 'S') {
         archivo = fopen("archivo.txt", "r");
@@ -341,7 +334,6 @@ void Borrar_Paquetes() {
         while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                       &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
             if (paquete.id != idBorrar) {
-                // Si el ID no coincide, escribir el paquete en el archivo temporal
                 fprintf(temporal, "ID: %d\n", paquete.id);
                 fprintf(temporal, "Nombre: %s\n", paquete.nombre);
                 fprintf(temporal, "Descripcion: %s\n", paquete.descripcion);
@@ -357,7 +349,6 @@ void Borrar_Paquetes() {
         fclose(archivo);
         fclose(temporal);
 
-        // Eliminar el archivo original y renombrar el temporal
         remove("archivo.txt");
         rename("temp.txt", "archivo.txt");
     } else {
