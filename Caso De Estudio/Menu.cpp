@@ -6,25 +6,18 @@
 
 using namespace std;
 
-struct Fecha {
-    int dia;
-    int mes;
-    int year;
-};
-
 struct Paquete {
-    int id;
+    int id = 0;
     char nombre[50];
     char descripcion[100];
     char origen[50];
     char destino[50];
     char remitente[50];
-    Fecha fecha_actual;
-    Fecha fecha_entrega;
+    int lastId = 0;
+    char Fecha_Entrega[11]; 
 };
 
-Paquete* paquetes[100];
-int paqueteCount = 0;
+
 
 void Menu();
 void Agregar_Paquetes();
@@ -42,9 +35,10 @@ void Registrar_Usuario();
 void Cambiar_Password();
 
 int main() {
+    
     int opc1;    
     cout << "InterPack \n";
-    cout << "''''''''''''''''''''\n"; 
+    cout << "''''''''''''''''''\n"; 
     cout << "Menu De Opciones\n";
     cout << "1) Iniciar Sesion\n";
     cout << "2) Registrar Sesion\n";
@@ -73,7 +67,7 @@ void Menu(){
     while (opc != 9)
     {
         cout << "InterPack \n";
-        cout << "''''''''''''''''''''\n"; 
+        cout << "''''''''''''''''''\n"; 
         cout << "Menu De Opciones\n";
         cout << "1) Agregar Nuevo Paquete\n";
         cout << "2) Borrar Paquete\n";
@@ -98,210 +92,358 @@ void Menu(){
             Actualizar_Paquetes();
             break;
         case 4:
-            int busqueda;
-            cout << "1) Buscar por ID\n";
-            cout << "2) Buscar por Nombre\n";
-            cout << "3) Buscar por Remitente\n";
-            cin >> busqueda;
-            switch (busqueda) {
-                case 1:
-                    Buscar_PaquetesID();
-                    break;
-                case 2:
-                    Buscar_PaquetesN();
-                    break;
-                case 3:
-                    Buscar_PaquetesR();
-                    break;
-                default:
-                    cout << "Opcion invalida\n";
-                    break;
+            int bsq;
+            system("cls");
+            cout << "Desea Buscar el Paquete por:\n";
+            cout << "1) Paquete Por ID\n";
+            cout << "2) Paquete Por Nombre\n";
+            cout << "3) Paquete Por Remitente\n";
+            cout << "4) Salir";
+            cin >> bsq;
+            switch (bsq)
+            {
+            case 1:
+                Buscar_PaquetesID();
+                break;
+            case 2:
+                Buscar_PaquetesN();
+                break;
+            case 3:
+                Buscar_PaquetesR();
+                break;
+            case 4:
+                main();
+                break;                
+            default:
+                break;
             }
             break;
         case 5:
-            int historial;
-            cout << "1) Historial No Entregados\n";
-            cout << "2) Historial Entregados\n";
-            cin >> historial;
-            switch (historial) {
-                case 1:
-                    Historial_No();
-                    break;
-                case 2:
-                    Historial_Si();
-                    break;
-                default:
-                    cout << "Opcion invalida \n";
-                    break;
+            int Hist;
+            system("cls");
+            cout << "Historial de paquetes:\n";
+            cout << "1) Paquetes Entregados\n";
+            cout << "2) Paquetes No Entregados\n";
+            cout << "3) Salir\n";
+            cin >> Hist;
+            switch (Hist)
+            {
+            case 1:
+                Historial_Si();
+                break;
+            case 2:
+                Historial_No();
+                break;
+            case 3:
+                main();
+                break;    
+            default:
+                break;
             }
             break;
+
         case 6:
-            int detalles;
-            cout << "1) Detalle No Entregados \n";
-            cout << "2) Detalle Entregados \n";
-            cin >> detalles;
-            switch (detalles) {
-                case 1:
-                    Detalles_Paquete_No();
-                    break;
-                case 2:
-                    Detalles_Paquete_Si();
-                    break;
-                default:
-                    cout << "Opcion invalida \n";
-                    break;
+            int Dtl;
+            system("cls");
+            cout << "Detalles de Paquetes:\n";
+            cout << "1) Paquetes Entregados:\n";
+            cout << "2) Paquetes No Entregados:\n";
+            cout << "3) Salir";
+            cin >> Dtl;
+            switch (Dtl)
+            {
+            case 1:
+                Detalles_Paquete_No();
+                break;
+            case 2:
+                Detalles_Paquete_Si();
+                break;
+            case 3:
+                main();
+                break;        
+            default:
+                break;
             }
             break;
         case 7:
             Registrar_Usuario();
             break;
         case 8:
-            Cambiar_Password();
+            int Set;
+            system("cls");
+            cout << "Ajustes:\n";
+            cout << "1) Cambiar Password:\n";
+            cout << "2) Info del app:\n";
+            cout << "3) Salir";
+            cin >> Set;
+            switch (Set)
+            {
+            case 1:
+                Cambiar_Password();
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                main();
+                break;                
+            default:
+                break;
+            }
             break;
         case 9:
-            return;
+            exit(0);
+            break;                        
         default:
-            cout << "Opcion invalida\n";
             break;
         }
     }
-}
-
-void ObtenerFechaActual(Fecha &fecha) {
-    time_t t = time(0);
-    struct tm *now = localtime(&t);
-    fecha.dia = now->tm_mday;
-    fecha.mes = now->tm_mon + 1;
-    fecha.year = now->tm_year + 1900;
 }
 
 void Agregar_Paquetes() {
-    Paquete* nuevoPaquete = new Paquete;
-    nuevoPaquete->id = paqueteCount + 1;  
+    Paquete paquete; 
+    FILE *AgregarPaquete;
+    FILE *IdFile;
 
-    cout << "Ingrese un nombre al paquete: ";
-    cin >> nuevoPaquete->nombre;
-    cout << "Ingrese descripcion del paquete: ";
-    cin >> nuevoPaquete->descripcion;
-    cout << "Ingrese origen del paquete: ";
-    cin >> nuevoPaquete->origen;
-    cout << "Ingrese destino del paquete: ";
-    cin >> nuevoPaquete->destino;
-    cout << "Ingrese remitente del paquete: ";
-    cin >> nuevoPaquete->remitente;
-
-    ObtenerFechaActual(nuevoPaquete->fecha_actual);
-
-
-    cout << "Ingrese la fecha de entrega (dd mm aaaa): ";
-    cin >> nuevoPaquete->fecha_entrega.dia >> nuevoPaquete->fecha_entrega.mes >> nuevoPaquete->fecha_entrega.year;
-
-    
-    paquetes[paqueteCount] = nuevoPaquete;
-
-    paqueteCount++;
-    cout << "Paquete agregado exitosamente con ID " << nuevoPaquete->id << ".\n";
-}
-
-bool FechaMenorIgual(Fecha fecha1, Fecha fecha2) {
-    if (fecha1.year < fecha2.year) return true;
-    if (fecha1.year > fecha2.year) return false;
-    if (fecha1.mes < fecha2.mes) return true;
-    if (fecha1.mes > fecha2.mes) return false;
-    if (fecha1.dia <= fecha2.dia) return true;
-    return false;
-}
-
-void Actualizar_Paquetes() {
-    if (paqueteCount == 0) {
-        cout << "No se encontró ningún paquete.\n";
-        return;
+    // Leer el último ID desde el archivo
+    IdFile = fopen("ID.txt", "r");
+    if (IdFile != NULL) {
+        fscanf(IdFile, "%d", &paquete.lastId);
+        fclose(IdFile);
     }
 
-    Fecha fechaActual;
-    ObtenerFechaActual(fechaActual);
+    paquete.id = paquete.lastId + 1; 
 
-    cout << "Lista de paquetes:\n";
-    for (int i = 0; i < paqueteCount; i++) {
-        Paquete* paquete = paquetes[i];
-        cout << "ID: " << paquete->id << "\n"
-             << ", Nombre: " << paquete->nombre << "\n"
-             << ", Descripcion: " << paquete->descripcion << "\n"
-             << ", Origen: " << paquete->origen << "\n"
-             << ", Destino: " << paquete->destino << "\n"
-             << ", Remitente: " << paquete->remitente << "\n";
+    AgregarPaquete = fopen("archivo.txt", "a"); 
+    if (AgregarPaquete == NULL) {
+        printf("\nEl archivo no pudo ser abierto/creado\n");
+    } else {
+        printf("Ingrese el nombre del paquete: \n");
+        getchar(); 
+        fgets(paquete.nombre, sizeof(paquete.nombre), stdin);
+        paquete.nombre[strcspn(paquete.nombre, "\n")] = 0;
+        fprintf(AgregarPaquete, "ID: %d\nNombre: %s\n", paquete.id, paquete.nombre);
         
-        cout << "Fecha de Entrega: " << paquete->fecha_entrega.dia << "/"
-             << paquete->fecha_entrega.mes << "/" << paquete->fecha_entrega.year << "\n";
+        printf("Ingrese la descripcion del paquete: \n");
+        fgets(paquete.descripcion, sizeof(paquete.descripcion), stdin);
+        paquete.descripcion[strcspn(paquete.descripcion, "\n")] = 0;
+        fprintf(AgregarPaquete, "Descripcion: %s\n", paquete.descripcion);
         
-        if (FechaMenorIgual(paquete->fecha_entrega, fechaActual)) {
-            cout << "El paquete ha llegado.\n";
+        printf("Ingrese el origen del paquete: \n");
+        fgets(paquete.origen, sizeof(paquete.origen), stdin);
+        paquete.origen[strcspn(paquete.origen, "\n")] = 0;
+        fprintf(AgregarPaquete, "Origen: %s\n", paquete.origen);
+        
+        printf("Ingrese el destino del paquete: \n");
+        fgets(paquete.destino, sizeof(paquete.destino), stdin);
+        paquete.destino[strcspn(paquete.destino, "\n")] = 0;
+        fprintf(AgregarPaquete, "Destino: %s\n", paquete.destino);
+        
+        printf("Ingrese el remitente del paquete: \n");
+        fgets(paquete.remitente, sizeof(paquete.remitente), stdin);
+        paquete.remitente[strcspn(paquete.remitente, "\n")] = 0;
+        fprintf(AgregarPaquete, "Remitente: %s\n", paquete.remitente);
+
+        printf("Ingrese la fecha de entrega (yyyy-mm-dd): \n");
+        fgets(paquete.Fecha_Entrega, sizeof(paquete.Fecha_Entrega), stdin);
+        paquete.Fecha_Entrega[strcspn(paquete.Fecha_Entrega, "\n")] = 0;
+        fprintf(AgregarPaquete, "Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
+       
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        char fechaActual[11];
+        snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+
+        
+        if (strcmp(paquete.Fecha_Entrega, fechaActual) > 0) {
+            printf("El paquete no ha sido entregado\n");
         } else {
-            cout << "El paquete no ha llegado.\n";
+            printf("El paquete ha sido entregado\n");
+        }
+
+        printf("Paquete agregado exitosamente con ID: %d\n", paquete.id);
+
+        fclose(AgregarPaquete);
+
+        // Actualizar el archivo con el último ID
+        IdFile = fopen("ID.txt", "w");
+        if (IdFile != NULL) {
+            fprintf(IdFile, "%d", paquete.id);
+            fclose(IdFile);
         }
     }
-    
 }
+
+
 
 
 void Borrar_Paquetes() {
-    if (paqueteCount == 0) {
-        cout << "No se encontró ningún paquete.\n";
+    int idBorrar;
+    char confirmacion;
+
+    FILE *archivo;
+    FILE *temporal;
+    Paquete paquete;
+
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char fechaActual[11];
+    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+
+    archivo = fopen("archivo.txt", "r");
+    temporal = fopen("temp.txt", "w");
+
+    if (archivo == NULL || temporal == NULL) {
+        printf("Error al abrir el archivo o crear el archivo temporal.\n");
         return;
     }
 
-    cout << "Lista de paquetes:\n";
-    for (int i = 0; i < paqueteCount; i++) {
-        cout << "ID: " << paquetes[i]->id 
-             << ", Nombre: " << paquetes[i]->nombre 
-             << ", Descripcion: " << paquetes[i]->descripcion 
-             << ", Origen: " << paquetes[i]->origen 
-             << ", Destino: " << paquetes[i]->destino 
-             << ", Remitente: " << paquetes[i]->remitente << "\n";
+    // Mostrar lista de paquetes
+    printf("Lista de paquetes:\n");
+    printf("---------------------------------------\n");
+
+    while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
+                  &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
+        // Mostrar la información del paquete
+        printf("ID: %d\n", paquete.id);
+        printf("Nombre: %s\n", paquete.nombre);
+        printf("Descripcion: %s\n", paquete.descripcion);
+        printf("Origen: %s\n", paquete.origen);
+        printf("Destino: %s\n", paquete.destino);
+        printf("Remitente: %s\n", paquete.remitente);
+        printf("Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
+
+        // Comparar la fecha de entrega con la fecha actual
+        if (strcmp(paquete.Fecha_Entrega, fechaActual) > 0) {
+            printf("El paquete aun no ha sido entregado\n");
+        } else {
+            printf("El paquete ya ha sido entregado\n");
+        }
+
+        printf("---------------------------------------\n");
     }
 
-    int idEliminar;
-    cout << "Ingrese ID del paquete que desea eliminar: ";
-    cin >> idEliminar;
+    fclose(archivo);
 
-    bool encontrado = false;
-    for (int i = 0; i < paqueteCount; i++) {
-        if (paquetes[i]->id == idEliminar) {
-            encontrado = true;
-            cout << "¿Está seguro que desea eliminar el paquete? (s/n): ";
-            char confirmacion;
-            cin >> confirmacion;
-            if (confirmacion == 's' || confirmacion == 'S') {
-                delete paquetes[i];
-                for (int j = i; j < paqueteCount - 1; j++) {
-                    paquetes[j] = paquetes[j + 1];
-                }
-                paqueteCount--;
-                cout << "Paquete eliminado exitosamente.\n";
+    // Solicitar al usuario el ID del paquete a borrar
+    printf("Ingrese el ID del paquete que desea borrar: ");
+    cin >> idBorrar;
+    cin.ignore(); // Limpiar el buffer de entrada
+
+    // Mostrar confirmación
+    printf("¿Está seguro de eliminar el paquete con ID %d? (s/n): ", idBorrar);
+    cin >> confirmacion;
+    cin.ignore(); // Limpiar el buffer de entrada
+
+    if (confirmacion == 's' || confirmacion == 'S') {
+        archivo = fopen("archivo.txt", "r");
+
+        while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
+                      &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
+            if (paquete.id != idBorrar) {
+                // Si el ID no coincide, escribir el paquete en el archivo temporal
+                fprintf(temporal, "ID: %d\n", paquete.id);
+                fprintf(temporal, "Nombre: %s\n", paquete.nombre);
+                fprintf(temporal, "Descripcion: %s\n", paquete.descripcion);
+                fprintf(temporal, "Origen: %s\n", paquete.origen);
+                fprintf(temporal, "Destino: %s\n", paquete.destino);
+                fprintf(temporal, "Remitente: %s\n", paquete.remitente);
+                fprintf(temporal, "Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
             } else {
-                cout << "Eliminación cancelada.\n";
+                printf("Paquete con ID %d eliminado.\n", idBorrar);
             }
-            break;
+        }
+
+        fclose(archivo);
+        fclose(temporal);
+
+        // Eliminar el archivo original y renombrar el temporal
+        remove("archivo.txt");
+        rename("temp.txt", "archivo.txt");
+    } else {
+        printf("Operación de eliminación cancelada.\n");
+    }
+}
+
+
+
+
+
+void Actualizar_Paquetes(){}
+void Buscar_PaquetesID(){}
+void Buscar_PaquetesN(){}
+void Buscar_PaquetesR(){}
+void Historial_No() {
+    FILE *archivo;
+    Paquete paquete;
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char fechaActual[11];
+    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+
+    archivo = fopen("archivo.txt", "r");
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        return;
+    }
+
+    printf("Paquetes no entregados:\n");
+    printf("---------------------------------------\n");
+
+    while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
+                  &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
+        if (strcmp(paquete.Fecha_Entrega, fechaActual) > 0) {
+            printf("ID: %d\n", paquete.id);
+            printf("Nombre: %s\n", paquete.nombre);
+            printf("Descripcion: %s\n", paquete.descripcion);
+            printf("Origen: %s\n", paquete.origen);
+            printf("Destino: %s\n", paquete.destino);
+            printf("Remitente: %s\n", paquete.remitente);
+            printf("Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
+            printf("---------------------------------------\n");
         }
     }
-    if (!encontrado) {
-        cout << "Paquete no encontrado.\n";
-    }
+
+    fclose(archivo);
 }
 
-void Historial_No() {
-    
-}
+
 void Historial_Si() {
+    FILE *archivo;
+    Paquete paquete;
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char fechaActual[11];
+    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
 
+    archivo = fopen("archivo.txt", "r");
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        return;
+    }
+
+    printf("Paquetes entregados:\n");
+    printf("---------------------------------------\n");
+
+    while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
+                  &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
+        if (strcmp(paquete.Fecha_Entrega, fechaActual) <= 0) {
+            printf("ID: %d\n", paquete.id);
+            printf("Nombre: %s\n", paquete.nombre);
+            printf("Descripcion: %s\n", paquete.descripcion);
+            printf("Origen: %s\n", paquete.origen);
+            printf("Destino: %s\n", paquete.destino);
+            printf("Remitente: %s\n", paquete.remitente);
+            printf("Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
+            printf("---------------------------------------\n");
+        }
+    }
+
+    fclose(archivo);
 }
 
-
-void Buscar_PaquetesID() {}
-void Buscar_PaquetesN() {}
-void Buscar_PaquetesR() {}
-void Detalles_Paquete_No() {}
-void Detalles_Paquete_Si() {}
-void Iniciar_Sesion() {}
-void Registrar_Usuario() {}
-void Cambiar_Password() {}
+void Detalles_Paquete_No(){}
+void Detalles_Paquete_Si(){}
+void Iniciar_Sesion(){}
+void Registrar_Usuario(){}
+void Cambiar_Password(){}
