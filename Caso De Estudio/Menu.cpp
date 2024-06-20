@@ -296,4 +296,9 @@ if ((ptrf = fopen("archivo.dat", "w"))== NULL){
 
 
 }
-void Cambiar_Password(){}
+void Cambiar_Password(){
+    char newpassword;
+
+    cout << "Ingrese su password para continuar";
+    cin >> newpassword;
+}
