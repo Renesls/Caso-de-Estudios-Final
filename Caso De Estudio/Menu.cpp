@@ -370,9 +370,28 @@ void Detalles_Paquete_No(){}
 void Detalles_Paquete_Si(){}
 
 void Iniciar_Sesion(){
-    
+
    char usuario1 [50];
    char password1 [50];
+   bool encontrado = false;
+   file * ptrf;
+
+   if ((ptrf = fopen("usuarios.edad", "r")) == NULL){
+    printf ("El archivo no puede ser abierto/creado");
+   }
+   else
+   {
+    printf("Ingrese su usuario");
+    scanf("%50s"usuario1);
+    printf("Ingrese su password");
+    scanf("%50s"password1);
+
+    while(!feof(ptrf)){
+      fscanf( ptrf "%50s %50s", usuario1, password1);
+      if(strcmp(usuario1, usuario))
+    }
+   }
+   
 
    cout << "Ingrese su usuario para iniciar sesion";
    cin >> usuario1;
@@ -397,19 +416,32 @@ int edad;
 char nombre [50];
 FILE * ptrf;
 
-if ((ptrf = fopen("archivo.dat", "w"))== NULL){
+if ((ptrf = fopen("usuarios.dat", "w"))== NULL){
     printf("\nEl archivo no pudo ser abierto/creado");
 }else{
    printf("Ingrese un nuevo usuario");
    scanf("%s", usuario);
    printf("Ingrese su password");
-   scanf("s", password);
+   scanf("%s", password);
    printf("Ingrese su nombre");
-   scanf("s", nombre);
+   scanf("%s", nombre);
    printf("Ingrese su edad");
-   scanf("d", edad);
-}
+   scanf("%d", edad);
 
+   while (!feof(stdin)){
+   fprintf(ptrf "%s %s %s %d", usuario, password, nombre, edad);
+   printf("Ingrese un nuevo usuario");
+   scanf("%s", usuario);
+   printf("Ingrese su password");
+   scanf("%s", password);
+   printf("Ingrese su nombre");
+   scanf("%s", nombre);
+   printf("Ingrese su edad");
+   scanf("%d", edad);
+}
+fclose (ptrf);
+printf ("Registro exitoso");
+}
 
 }
 void Cambiar_Password(){
@@ -417,19 +449,5 @@ void Cambiar_Password(){
     
 
     cout << "Ingrese su password para continuar";
-    cout << "Si no recuerda su password presione ctrlz";
-
-    switch (newpassword)
-    {
-    case 1:
-        cout << "Cambiar password";
-        break;
-
-    case 2:
-    cout << "Salir";
-    
-    default:
-    cout "Error";
-        break;
-    }
+    cin >> newpassword;
 }
