@@ -368,7 +368,27 @@ void Historial_No(){}
 void Historial_Si(){}
 void Detalles_Paquete_No(){}
 void Detalles_Paquete_Si(){}
-void Iniciar_Sesion(){}
+
+void Iniciar_Sesion(){
+    
+   char usuario1 [50];
+   char password1 [50];
+
+   cout << "Ingrese su usuario para iniciar sesion";
+   cin >> usuario1;
+   cout << "Ingrese su password para iniciar sesion";
+   cin >> password1;
+
+   if (usuario = usuario1 && password = password1 )
+   {
+     cout << "Inicio de sesion exitoso";
+   }
+   else
+
+   cout << "Password o usuario incorrectos";
+
+
+}
 void Registrar_Usuario(){
 
 char usuario [50];
@@ -394,7 +414,22 @@ if ((ptrf = fopen("archivo.dat", "w"))== NULL){
 }
 void Cambiar_Password(){
     char newpassword;
+    
 
     cout << "Ingrese su password para continuar";
-    cin >> newpassword;
+    cout << "Si no recuerda su password presione ctrlz";
+
+    switch (newpassword)
+    {
+    case 1:
+        cout << "Cambiar password";
+        break;
+
+    case 2:
+    cout << "Salir";
+    
+    default:
+    cout "Error";
+        break;
+    }
 }
