@@ -6,6 +6,21 @@
 
 using namespace std;
 
+/* 
+struct tm {
+   int tm_sec;         // seconds,  range 0 to 59          
+   int tm_min;         // minutes, range 0 to 59           
+   int tm_hour;        // hours, range 0 to 23             
+   int tm_mday;        // day of the month, range 1 to 31  
+   int tm_mon;         // month, range 0 to 11             
+   int tm_year;        // The number of years since 1900   
+   int tm_wday;        // day of the week, range 0 to 6    
+   int tm_yday;        // day in the year, range 0 to 365  
+   int tm_isdst;       // daylight saving time      
+   };       
+
+*/
+
 struct Paquete {
     int id = 0;
     char nombre[50];
@@ -323,10 +338,10 @@ void Borrar_Paquetes() {
 
     printf("Ingrese el ID del paquete que desea borrar: ");
     cin >> idBorrar;
-    cin.ignore(); 
+
     printf("¿Está seguro de eliminar el paquete con ID %d? (s/n): ", idBorrar);
     cin >> confirmacion;
-    cin.ignore(); 
+
 
     if (confirmacion == 's' || confirmacion == 'S') {
         archivo = fopen("archivo.txt", "r");
@@ -379,7 +394,7 @@ void Historial_No() {
     }
 
     printf("Paquetes no entregados:\n");
-    printf("---------------------------------------\n");
+    printf("----------------------------------------------------\n");
 
     while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
@@ -391,7 +406,7 @@ void Historial_No() {
             printf("Destino: %s\n", paquete.destino);
             printf("Remitente: %s\n", paquete.remitente);
             printf("Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
-            printf("---------------------------------------\n");
+            printf("----------------------------------------------------\n");
         }
     }
 
@@ -402,10 +417,17 @@ void Historial_No() {
 void Historial_Si() {
     FILE *archivo;
     Paquete paquete;
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    char fechaActual[11];
-    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+    time_t t = time(NULL); //declara una variable para almacenar el tiempo
+    struct tm tm = *localtime(&t); // un struct que contiene informacion sobre la fecha y la hora
+    char fechaActual[11]; //arreglo para almacenar la fecha con el formato "yyyy-mm-dd"
+    //snprintf se utiliza para reiniciar y almacenar una cadena en fechaactual
+    //sizeof me da el size del buffer
+    //tm_year + 1900 es para obtener el year actual 
+    //tm_mon + 1 Es para obtener el mes actual
+    //tm_mday Es para obtener el dia actual
+    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday); 
+    
+    
 
     archivo = fopen("archivo.txt", "r");
     if (archivo == NULL) {
@@ -414,10 +436,11 @@ void Historial_Si() {
     }
 
     printf("Paquetes entregados:\n");
-    printf("---------------------------------------\n");
+    printf("------------------------------------------------------\n");
 
     while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
+        
         if (strcmp(paquete.Fecha_Entrega, fechaActual) <= 0) {
             printf("ID: %d\n", paquete.id);
             printf("Nombre: %s\n", paquete.nombre);
