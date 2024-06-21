@@ -216,12 +216,15 @@ void Menu(){
 }
 
 void Agregar_Paquetes() {
+    // declarar una variable para utilizar el struct de Paquete
     Paquete paquete; 
+    // declarar 2 punteros para manejar archivos 
     FILE *AgregarPaquete;
     FILE *IdFile;
 
     IdFile = fopen("ID.txt", "r");
     if (IdFile != NULL) {
+        //Lee un numero del archivo y lo guarda
         fscanf(IdFile, "%d", &paquete.lastId);
         fclose(IdFile);
     }
@@ -232,8 +235,12 @@ void Agregar_Paquetes() {
     if (AgregarPaquete == NULL) {
         printf("\nEl archivo no pudo ser abierto/creado\n");
     } else {
+        //fgets lo utilizamos para leer las entradas del paquete
+        //fprintf para escribir cada campo del paquete en el archivo.txt
+        
+
         printf("Ingrese el nombre del paquete: \n");
-        getchar(); 
+        getchar(); // Usar getchar() para consumir y descartar el carácter de nueva línea residual en el búfer
         fgets(paquete.nombre, sizeof(paquete.nombre), stdin);
         paquete.nombre[strcspn(paquete.nombre, "\n")] = 0;
         fprintf(AgregarPaquete, "ID: %d\nNombre: %s\n", paquete.id, paquete.nombre);
