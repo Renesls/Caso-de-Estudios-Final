@@ -52,13 +52,15 @@ void Cambiar_Password();
 int main() {
     
     int opc1;    
-    cout << "InterPack \n";
-    cout << "''''''''''''''''''\n"; 
-    cout << "Menu De Opciones\n";
-    cout << "1) Iniciar Sesion\n";
-    cout << "2) Registrar Sesion\n";
-    cout << "3) Salir\n";
+    cout << "******** InterPack ********\n";
+    cout << "---------------------------\n"; 
+    cout << "| Menu De Opciones        |\n";
+    cout << "| 1) Iniciar Sesion       |\n";
+    cout << "| 2) Registrar Sesion     |\n";
+    cout << "| 3) Salir                |\n";
+    cout << "---------------------------\n"; 
     cin >> opc1;
+    system("cls");
 
     switch (opc1)
     {
@@ -81,19 +83,21 @@ void Menu(){
     int opc;
     while (opc != 9)
     {
-        cout << "InterPack \n";
-        cout << "''''''''''''''''''\n"; 
-        cout << "Menu De Opciones\n";
-        cout << "1) Agregar Nuevo Paquete\n";
-        cout << "2) Borrar Paquete\n";
-        cout << "3) Actualizar Paquete\n";
-        cout << "4) Buscar Paquetes\n";
-        cout << "5) Historial de Paquetes\n";
-        cout << "6) Detalle de paquetes\n";
-        cout << "7) Registrar Usuario\n";
-        cout << "8) Ajustes\n";
-        cout << "9) Salir\n";
+        cout << "********* InterPack *********\n";
+        cout << "-----------------------------\n"; 
+        cout << "| Menu De Opciones          |\n";
+        cout << "| 1) Agregar Nuevo Paquete  |\n";
+        cout << "| 2) Borrar Paquete         |\n";
+        cout << "| 3) Actualizar Paquete     |\n";
+        cout << "| 4) Buscar Paquetes        |\n";
+        cout << "| 5) Historial de Paquetes  |\n";
+        cout << "| 6) Detalle de paquetes    |\n";
+        cout << "| 7) Registrar Usuario      |\n";
+        cout << "| 8) Ajustes                |\n";
+        cout << "| 9) Salir                  |\n";
+        cout << "-----------------------------\n"; 
         cin >> opc;
+        cout << "\033[A\33[2K\r";
 
         switch (opc)
         {
@@ -374,7 +378,7 @@ void Borrar_Paquetes() {
         remove("archivo.txt");
         rename("temp.txt", "archivo.txt");
     } else {
-        printf("Operación de eliminación cancelada.\n");
+        printf("Se elimino correctamente del sistema.\n");
     }
 }
 
@@ -414,10 +418,12 @@ void Historial_No() {
             printf("Remitente: %s\n", paquete.remitente);
             printf("Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
             printf("----------------------------------------------------\n");
+            printf("\n"); 
         }
     }
 
     fclose(archivo);
+    system("pause");
 }
 
 
@@ -461,6 +467,7 @@ void Historial_Si() {
     }
 
     fclose(archivo);
+    system("pause");
 }
 
 void Detalles_Paquete_No(){}
