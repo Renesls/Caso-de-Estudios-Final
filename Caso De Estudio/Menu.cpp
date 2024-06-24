@@ -6,6 +6,21 @@
 
 using namespace std;
 
+/* 
+struct tm {
+   int tm_sec;         // seconds,  range 0 to 59          
+   int tm_min;         // minutes, range 0 to 59           
+   int tm_hour;        // hours, range 0 to 23             
+   int tm_mday;        // day of the month, range 1 to 31  
+   int tm_mon;         // month, range 0 to 11             
+   int tm_year;        // The number of years since 1900   
+   int tm_wday;        // day of the week, range 0 to 6    
+   int tm_yday;        // day in the year, range 0 to 365  
+   int tm_isdst;       // daylight saving time      
+   };       
+
+*/
+
 struct Paquete {
     int id = 0;
     char nombre[50];
@@ -37,13 +52,15 @@ void Cambiar_Password();
 int main() {
     
     int opc1;    
-    cout << "InterPack \n";
-    cout << "''''''''''''''''''\n"; 
-    cout << "Menu De Opciones\n";
-    cout << "1) Iniciar Sesion\n";
-    cout << "2) Registrar Sesion\n";
-    cout << "3) Salir\n";
+    cout << "******** InterPack ********\n";
+    cout << "---------------------------\n"; 
+    cout << "| Menu De Opciones        |\n";
+    cout << "| 1) Iniciar Sesion       |\n";
+    cout << "| 2) Registrar Sesion     |\n";
+    cout << "| 3) Salir                |\n";
+    cout << "---------------------------\n"; 
     cin >> opc1;
+    system("cls");
 
     switch (opc1)
     {
@@ -66,19 +83,21 @@ void Menu(){
     int opc;
     while (opc != 9)
     {
-        cout << "InterPack \n";
-        cout << "''''''''''''''''''\n"; 
-        cout << "Menu De Opciones\n";
-        cout << "1) Agregar Nuevo Paquete\n";
-        cout << "2) Borrar Paquete\n";
-        cout << "3) Actualizar Paquete\n";
-        cout << "4) Buscar Paquetes\n";
-        cout << "5) Historial de Paquetes\n";
-        cout << "6) Detalle de paquetes\n";
-        cout << "7) Registrar Usuario\n";
-        cout << "8) Ajustes\n";
-        cout << "9) Salir\n";
+        cout << "********* InterPack *********\n";
+        cout << "-----------------------------\n"; 
+        cout << "| Menu De Opciones          |\n";
+        cout << "| 1) Agregar Nuevo Paquete  |\n";
+        cout << "| 2) Borrar Paquete         |\n";
+        cout << "| 3) Actualizar Paquete     |\n";
+        cout << "| 4) Buscar Paquetes        |\n";
+        cout << "| 5) Historial de Paquetes  |\n";
+        cout << "| 6) Detalle de paquetes    |\n";
+        cout << "| 7) Registrar Usuario      |\n";
+        cout << "| 8) Ajustes                |\n";
+        cout << "| 9) Salir                  |\n";
+        cout << "-----------------------------\n"; 
         cin >> opc;
+        cout << "\033[A\33[2K\r";
 
         switch (opc)
         {
@@ -201,12 +220,15 @@ void Menu(){
 }
 
 void Agregar_Paquetes() {
+    // declarar una variable para utilizar el struct de Paquete
     Paquete paquete; 
+    // declarar 2 punteros para manejar archivos 
     FILE *AgregarPaquete;
     FILE *IdFile;
 
     IdFile = fopen("ID.txt", "r");
     if (IdFile != NULL) {
+        //Lee un numero del archivo y lo guarda
         fscanf(IdFile, "%d", &paquete.lastId);
         fclose(IdFile);
     }
@@ -217,8 +239,12 @@ void Agregar_Paquetes() {
     if (AgregarPaquete == NULL) {
         printf("\nEl archivo no pudo ser abierto/creado\n");
     } else {
+        //fgets lo utilizamos para leer las entradas del paquete
+        //fprintf para escribir cada campo del paquete en el archivo.txt
+        
+
         printf("Ingrese el nombre del paquete: \n");
-        getchar(); 
+        getchar(); // Usar getchar() para consumir y descartar el carácter de nueva línea residual en el búfer
         fgets(paquete.nombre, sizeof(paquete.nombre), stdin);
         paquete.nombre[strcspn(paquete.nombre, "\n")] = 0;
         fprintf(AgregarPaquete, "ID: %d\nNombre: %s\n", paquete.id, paquete.nombre);
@@ -323,10 +349,10 @@ void Borrar_Paquetes() {
 
     printf("Ingrese el ID del paquete que desea borrar: ");
     cin >> idBorrar;
-    cin.ignore(); 
+
     printf("¿Está seguro de eliminar el paquete con ID %d? (s/n): ", idBorrar);
     cin >> confirmacion;
-    cin.ignore(); 
+
 
     if (confirmacion == 's' || confirmacion == 'S') {
         archivo = fopen("archivo.txt", "r");
@@ -352,7 +378,7 @@ void Borrar_Paquetes() {
         remove("archivo.txt");
         rename("temp.txt", "archivo.txt");
     } else {
-        printf("Operación de eliminación cancelada.\n");
+        printf("Se elimino correctamente del sistema.\n");
     }
 }
 
@@ -379,7 +405,7 @@ void Historial_No() {
     }
 
     printf("Paquetes no entregados:\n");
-    printf("---------------------------------------\n");
+    printf("----------------------------------------------------\n");
 
     while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
@@ -391,21 +417,30 @@ void Historial_No() {
             printf("Destino: %s\n", paquete.destino);
             printf("Remitente: %s\n", paquete.remitente);
             printf("Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
-            printf("---------------------------------------\n");
+            printf("----------------------------------------------------\n");
+            printf("\n"); 
         }
     }
 
     fclose(archivo);
+    system("pause");
 }
 
 
 void Historial_Si() {
     FILE *archivo;
     Paquete paquete;
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    char fechaActual[11];
-    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+    time_t t = time(NULL); //declara una variable para almacenar el tiempo
+    struct tm tm = *localtime(&t); // un struct que contiene informacion sobre la fecha y la hora
+    char fechaActual[11]; //arreglo para almacenar la fecha con el formato "yyyy-mm-dd"
+    //snprintf se utiliza para reiniciar y almacenar una cadena en fechaactual
+    //sizeof me da el size del buffer
+    //tm_year + 1900 es para obtener el year actual 
+    //tm_mon + 1 Es para obtener el mes actual
+    //tm_mday Es para obtener el dia actual
+    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday); 
+    
+    
 
     archivo = fopen("archivo.txt", "r");
     if (archivo == NULL) {
@@ -414,10 +449,11 @@ void Historial_Si() {
     }
 
     printf("Paquetes entregados:\n");
-    printf("---------------------------------------\n");
+    printf("------------------------------------------------------\n");
 
     while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
+        
         if (strcmp(paquete.Fecha_Entrega, fechaActual) <= 0) {
             printf("ID: %d\n", paquete.id);
             printf("Nombre: %s\n", paquete.nombre);
@@ -431,6 +467,7 @@ void Historial_Si() {
     }
 
     fclose(archivo);
+    system("pause");
 }
 
 void Detalles_Paquete_No(){}
