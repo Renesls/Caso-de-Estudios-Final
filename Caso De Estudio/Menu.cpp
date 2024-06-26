@@ -18,6 +18,13 @@ struct Paquete {
 
 };
 
+struct Sesion{
+    char usuario [50];
+    char password [50];
+    int edad;
+    char nombre [50];
+};
+
 Paquete* paquetes[100];
 int paqueteCount = 0;
 
