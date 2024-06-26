@@ -417,34 +417,36 @@ void Iniciar_Sesion(){
 }
 void Registrar_Usuario(){
 
-char usuario [50];
-char password [50];
-int edad;
-char nombre [50];
+Sesion sesion;
 FILE * ptrf;
 
-if ((ptrf = fopen("usuarios.dat", "w"))== NULL){
+if ((ptrf = fopen("usuarios.txt", "w"))== NULL){
     printf("\nEl archivo no pudo ser abierto/creado");
 }else{
    printf("Ingrese un nuevo usuario");
-   scanf("%s", usuario);
+   scanf("%s", sesion.usuario);
+   fprintf(ptrf, "%s", sesion.usuario);
    printf("Ingrese su password");
-   scanf("%s", password);
+   scanf("%s", sesion.password);
+   fprintf(ptrf, "%s", sesion.password);
    printf("Ingrese su nombre");
-   scanf("%s", nombre);
+   scanf("%s", sesion.nombre);
+   fprintf(ptrf, "%s", sesion.nombre);   
    printf("Ingrese su edad");
-   scanf("%d", edad);
+   scanf("%d", sesion.edad);
+   fprintf(ptrf, "%d", sesion.edad);
+
 
    while (!feof(stdin)){
-   fprintf(ptrf "%s %s %s %d", usuario, password, nombre, edad);
+   fprintf(ptrf, "%s %s %s %d", sesion.usuario, sesion.password, sesion.nombre, sesion.edad);
    printf("Ingrese un nuevo usuario");
-   scanf("%s", usuario);
+   scanf("%s", sesion.usuario);
    printf("Ingrese su password");
-   scanf("%s", password);
+   scanf("%s", sesion.password);
    printf("Ingrese su nombre");
-   scanf("%s", nombre);
+   scanf("%s", sesion.nombre);
    printf("Ingrese su edad");
-   scanf("%d", edad);
+   scanf("%d", sesion.edad);
 }
 fclose (ptrf);
 printf ("Registro exitoso");
