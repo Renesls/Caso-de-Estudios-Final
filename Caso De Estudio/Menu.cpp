@@ -378,25 +378,29 @@ void Detalles_Paquete_Si(){}
 
 void Iniciar_Sesion(){
 
+   Sesion sesion;
    char usuario1 [50];
    char password1 [50];
    bool encontrado = false;
-   file * ptrf;
+   FILE * ptrf;
 
-   if ((ptrf = fopen("usuarios.edad", "r")) == NULL){
+   if ((ptrf = fopen("usuariosedad.txt", "r")) == NULL){
     printf ("El archivo no puede ser abierto/creado");
    }
    else
    {
     printf("Ingrese su usuario");
-    scanf("%50s"usuario1);
+    scanf("%50s", usuario1);
     printf("Ingrese su password");
-    scanf("%50s"password1);
+    scanf("%50s", password1);
 
     while(!feof(ptrf)){
-      fscanf( ptrf "%50s %50s", usuario1, password1);
-      if(strcmp(usuario1, usuario))
-    }
+      fscanf(ptrf, "%50s %50s", usuario1, password1);
+      if(strcmp(usuario1, sesion.usuario)){
+
+      }
+      
+    };
    }
    
 
@@ -404,16 +408,6 @@ void Iniciar_Sesion(){
    cin >> usuario1;
    cout << "Ingrese su password para iniciar sesion";
    cin >> password1;
-
-   if (usuario = usuario1 && password = password1 )
-   {
-     cout << "Inicio de sesion exitoso";
-   }
-   else
-
-   cout << "Password o usuario incorrectos";
-
-
 }
 void Registrar_Usuario(){
 
