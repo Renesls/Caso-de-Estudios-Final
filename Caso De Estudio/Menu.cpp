@@ -32,6 +32,14 @@ struct Paquete {
     char Fecha_Entrega[11]; 
 };
 
+struct Sesion{
+    char usuario[50];
+    char password[50];
+    int edad;
+    char nombre[50];
+    char nombre2[50];
+};
+
 
 
 void Menu();
@@ -64,7 +72,7 @@ int main() {
     switch (opc1)
     {
     case 1:
-        Menu();
+        Iniciar_Sesion();
         break;
     case 2:
         Registrar_Usuario();
@@ -520,8 +528,129 @@ void Historial_Si() {
     system("pause");
 }
 
-void Detalles_Paquete_No(){}
-void Detalles_Paquete_Si(){}
-void Iniciar_Sesion(){}
-void Registrar_Usuario(){}
-void Cambiar_Password(){}
+void Iniciar_Sesion(){
+
+   Sesion sesion;
+   char usuario1 [50];
+   char password1 [50];
+   bool encontrado = false;
+   FILE * ptrf;
+
+   if ((ptrf = fopen("usuarios.txt", "r")) == NULL){
+    printf ("El archivo no puede ser abierto/creado");
+   }
+   else
+   {
+    printf("Ingrese su usuario: ");
+    scanf("%50s", usuario1);
+    printf("Ingrese su password: ");
+    scanf("%50s", password1);
+
+    while (fscanf(ptrf, "%50s %50s %s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF){
+      if(strcmp(usuario1, sesion.usuario) == 0 && strcmp(password1, sesion.password) == 0){
+          printf ("Inicio de sesion exitoso\n");
+          encontrado = true;
+          system ("pause");
+          system("cls");
+          Menu();
+      }
+      
+    }
+   }
+
+  fclose(ptrf);
+  if (!encontrado){
+    printf("Password o usuario incorrecto \n");
+    system ("pause");
+    system("cls");
+    main();
+    }
+
+
+   
+}
+void Registrar_Usuario() {
+    Sesion sesion;
+    FILE *ptrf;
+    char usuario1[51];
+    int usuario_existe = 0;
+
+    if ((ptrf = fopen("usuarios.txt", "a+")) == NULL) {
+        printf("\nEl archivo no pudo ser abierto/creado");
+    } else {
+        printf("Ingrese un nuevo usuario: ");
+        scanf("%50s", sesion.usuario);
+
+        rewind(ptrf); //funciona para regresar al inicio del archivo para que lea todos los archivos(Creo xd)
+        while (fscanf(ptrf, "%50s", usuario1) != EOF) {
+            fscanf(ptrf, "%*s %*s %*d");  
+            if (strcmp(sesion.usuario, usuario1) == 0) {
+                usuario_existe = 1;
+                main();
+            }
+        }
+
+        if (usuario_existe) {
+            printf("El usuario ya existe y no debe ser guardado.\n");
+        } else {
+            printf("Ingrese su password: ");
+            scanf("%50s", sesion.password);
+            printf("Ingrese su nombre: ");
+            scanf("%50s", sesion.nombre);
+            printf("Ingrese su edad: ");
+            scanf("%d", &sesion.edad);
+
+            fprintf(ptrf, "%s %s %s %d\n", sesion.usuario, sesion.password, sesion.nombre, sesion.edad);
+            printf("Registro exitoso\n");
+        }
+
+        fclose(ptrf);
+    }
+
+    system("pause");
+}
+
+void Cambiar_Password(){
+    char usuario1[50];
+    char oldPassword[50];
+    char newPassword[50];
+    Sesion sesion;
+    bool encontrado = false;
+    FILE *ptrf;
+    FILE *tempf;
+
+    ptrf = fopen("usuarios.txt", "r");
+    tempf = fopen("temp.txt", "w");
+
+    if (ptrf == NULL || tempf == NULL) {
+        printf("\nEl archivo no pudo ser abierto\n");
+        return;
+    }
+
+    printf("Ingrese su usuario para cambiar password: ");
+    scanf("%50s", usuario1);
+    printf("Ingrese su password actual: ");
+    scanf("%50s", oldPassword);
+    printf("Ingrese su nuevo password: ");
+    scanf("%50s", newPassword);
+
+    while (fscanf(ptrf, "%50s %50s %50s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF) {
+        if (strcmp(sesion.usuario, usuario1) == 0 && strcmp(sesion.password, oldPassword) == 0) {
+            strcpy(sesion.password, newPassword);
+            encontrado = true;
+        }
+        fprintf(tempf, "%s %s %s %d\n", sesion.usuario, sesion.password, sesion.nombre, sesion.edad);
+    }
+
+    fclose(ptrf);
+    fclose(tempf);
+    
+    remove("usuarios.txt");
+    rename("temp.txt", "usuarios.txt");
+
+    if (encontrado) {
+        printf("Password cambiada exitosamente\n");
+    } else {
+        printf("Usuario o password incorrectos\n");
+    }
+}
