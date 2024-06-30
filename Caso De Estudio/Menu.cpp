@@ -394,20 +394,19 @@ void Iniciar_Sesion(){
     printf("Ingrese su password");
     scanf("%50s", password1);
 
-    while(!feof(ptrf)){
+    while (fscanf(ptrf, "%s %s %s %d", usuario, password, nombre, &edad) != EOF){
       fscanf(ptrf, "%50s %50s", usuario1, password1);
-      if(strcmp(usuario1, sesion.usuario)){
-
+      if(strcmp(usuario1, sesion.usuario) == 0 && strcmp(password1, sesion.password) == 0){
+          printf ("Inicio de sesion exitoso");
+          encontrado = true;
       }
       
-    };
+    }
    }
+  fclose(ptrf);
+  if (!encontrado)
+  printf("Password o usuario incorrecto");
    
-
-   cout << "Ingrese su usuario para iniciar sesion";
-   cin >> usuario1;
-   cout << "Ingrese su password para iniciar sesion";
-   cin >> password1;
 }
 void Registrar_Usuario(){
 
@@ -448,9 +447,53 @@ printf ("Registro exitoso");
 
 }
 void Cambiar_Password(){
-    char newpassword;
-    
 
-    cout << "Ingrese su password para continuar";
-    cin >> newpassword;
+    char usuario1[50];
+    char oldPassword[50];
+    char newPassword[50];
+    char usuario[50];
+    char password[50];
+    char nombre[50];
+    int edad;
+    Sesion sesion;
+    bool encontrado = false;
+    FILE *ptrf;
+    FILE *tempf;
+
+    ptrf = fopen("usuarios.dat", "r");
+    tempf = fopen("temp.dat", "w");
+
+    if (ptrf == NULL || tempf == NULL) {
+        printf("\nEl archivo no pudo ser abierto\n");
+        return;
+    }
+
+    printf("Ingrese su usuario para cambiar password: ");
+    scanf("%s", usuario1);
+    printf("Ingrese su password actual: ");
+    scanf("%s", oldPassword);
+    printf("Ingrese su nuevo password: ");
+    scanf("%s", newPassword);
+
+    while (fscanf(ptrf, "%s %s %s %d", usuario, password, nombre, &edad) != EOF) {
+        if (strcmp(usuario, usuario1) == 0 && strcmp(password, oldPassword) == 0) {
+            strcpy(password, newPassword);
+            encontrado = true;
+        }
+        fprintf(tempf, "%s %s %s %d\n", usuario, password, nombre, edad);
+    }
+
+    fclose(ptrf);
+    fclose(tempf);
+
+    remove("usuarios.dat");
+    rename("temp.dat", "usuarios.dat");
+
+    if (encontrado) {
+        printf("Password cambiada exitosamente\n");
+    } else {
+        printf("Usuario o password incorrectos\n");
+    }
 }
+
+
