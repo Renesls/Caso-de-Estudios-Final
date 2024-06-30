@@ -454,7 +454,7 @@ void Cambiar_Password(){
     FILE *ptrf;
     FILE *tempf;
 
-    ptrf = fopen("usuarios.dat", "r");
+    ptrf = fopen("usuarios.txt", "r");
     tempf = fopen("temp.dat", "w");
 
     if (ptrf == NULL || tempf == NULL) {
