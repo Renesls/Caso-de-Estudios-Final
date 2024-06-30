@@ -57,7 +57,7 @@ int main() {
     switch (opc1)
     {
     case 1:
-        Menu();
+        Iniciar_Sesion();
         break;
     case 2:
         Registrar_Usuario();
@@ -384,20 +384,20 @@ void Iniciar_Sesion(){
    bool encontrado = false;
    FILE * ptrf;
 
-   if ((ptrf = fopen("usuariosedad.txt", "r")) == NULL){
+   if ((ptrf = fopen("usuarios.txt", "r")) == NULL){
     printf ("El archivo no puede ser abierto/creado");
    }
    else
    {
-    printf("Ingrese su usuario");
+    printf("Ingrese su usuario: ");
     scanf("%50s", usuario1);
-    printf("Ingrese su password");
+    printf("Ingrese su password: ");
     scanf("%50s", password1);
 
     while (fscanf(ptrf, "%s %s %s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF){
       fscanf(ptrf, "%50s %50s", usuario1, password1);
       if(strcmp(usuario1, sesion.usuario) == 0 && strcmp(password1, sesion.password) == 0){
-          printf ("Inicio de sesion exitoso");
+          printf ("Inicio de sesion exitoso\n");
           encontrado = true;
       }
       
@@ -406,6 +406,8 @@ void Iniciar_Sesion(){
   fclose(ptrf);
   if (!encontrado)
   printf("Password o usuario incorrecto");
+  system ("pause");
+  Menu();
    
 }
 void Registrar_Usuario(){
@@ -413,40 +415,31 @@ void Registrar_Usuario(){
 Sesion sesion;
 FILE * ptrf;
 
-if ((ptrf = fopen("usuarios.txt", "w"))== NULL){
-    printf("\nEl archivo no pudo ser abierto/creado");
-}else{
-   printf("Cree su usuario\n");
-   scanf("%s", sesion.usuario);
-   fprintf(ptrf, "%s", sesion.usuario);
-   printf("Ingrese su password\n");
-   scanf("%s", sesion.password);
-   fprintf(ptrf, "%s", sesion.password);
-   printf("Ingrese su nombre\n");
-   scanf("%s", sesion.nombre);
-   fprintf(ptrf, "%s", sesion.nombre);   
-   printf("Ingrese su edad\n");
-   scanf("%d", sesion.edad);
-   fprintf(ptrf, "%d", sesion.edad);
+    if ((ptrf = fopen("usuarios.txt", "a")) == NULL) {
+        printf("\nEl archivo no pudo ser abierto/creado");
+    } else {
+        printf("Ingrese un nuevo usuario: ");
+        scanf("%50s", sesion.usuario);
+        fprintf(ptrf, "%s ", sesion.usuario);  
+        printf("Ingrese su password: ");
+        scanf("%50s", sesion.password);
+        fprintf(ptrf, "%s ", sesion.password);
+        printf("Ingrese su nombre: ");
+        scanf("%50s", sesion.nombre);
+        fprintf(ptrf, "%s ", sesion.nombre);
+        printf("Ingrese su edad: ");
+        scanf("%d", &sesion.edad);
+        fprintf(ptrf, "%d\n", sesion.edad);  
 
 
-   while (!feof(stdin)){
-   fprintf(ptrf, "%s %s %s %d", sesion.usuario, sesion.password, sesion.nombre, sesion.edad);
-   printf("Cree su usuario\n");
-   scanf("%s", sesion.usuario);
-   printf("Ingrese su password\n");
-   scanf("%s", sesion.password);
-   printf("Ingrese su nombre\n");
-   scanf("%s", sesion.nombre);
-   printf("Ingrese su edad\n");
-   scanf("%d", sesion.edad);
-}
-fclose (ptrf);
+        fclose(ptrf);
+        printf("Registro exitoso\n");
+    }
 
-printf ("Registro exitoso\n");
+    system("pause");
+    main();
 }
 
-}
 void Cambiar_Password(){
 
     char usuario1[50];
