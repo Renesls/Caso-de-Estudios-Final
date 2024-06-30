@@ -43,11 +43,10 @@ void Buscar_PaquetesN();
 void Buscar_PaquetesR();
 void Historial_No();
 void Historial_Si();
-void Detalles_Paquete_No();
-void Detalles_Paquete_Si();
 void Iniciar_Sesion();
 void Registrar_Usuario();
 void Cambiar_Password();
+
 
 int main() {
     
@@ -91,10 +90,9 @@ void Menu(){
         cout << "| 3) Actualizar Paquete     |\n";
         cout << "| 4) Buscar Paquetes        |\n";
         cout << "| 5) Historial de Paquetes  |\n";
-        cout << "| 6) Detalle de paquetes    |\n";
-        cout << "| 7) Registrar Usuario      |\n";
-        cout << "| 8) Ajustes                |\n";
-        cout << "| 9) Salir                  |\n";
+        cout << "| 6) Registrar Usuario      |\n";
+        cout << "| 7) Ajustes                |\n";
+        cout << "| 8) Salir                  |\n";
         cout << "-----------------------------\n"; 
         cin >> opc;
         cout << "\033[A\33[2K\r";
@@ -109,7 +107,6 @@ void Menu(){
             break;
         case 3:
             Actualizar_Paquetes();
-            break;
         case 4:
             int bsq;
             system("cls");
@@ -162,32 +159,9 @@ void Menu(){
             break;
 
         case 6:
-            int Dtl;
-            system("cls");
-            cout << "Detalles de Paquetes:\n";
-            cout << "1) Paquetes Entregados:\n";
-            cout << "2) Paquetes No Entregados:\n";
-            cout << "3) Salir";
-            cin >> Dtl;
-            switch (Dtl)
-            {
-            case 1:
-                Detalles_Paquete_No();
-                break;
-            case 2:
-                Detalles_Paquete_Si();
-                break;
-            case 3:
-                main();
-                break;        
-            default:
-                break;
-            }
-            break;
-        case 7:
             Registrar_Usuario();
-            break;
-        case 8:
+
+        case 7:
             int Set;
             system("cls");
             cout << "Ajustes:\n";
@@ -210,7 +184,7 @@ void Menu(){
                 break;
             }
             break;
-        case 9:
+        case 8:
             exit(0);
             break;                        
         default:
@@ -279,14 +253,6 @@ void Agregar_Paquetes() {
         char fechaActual[11];
         snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
 
-        
-        if (strcmp(paquete.Fecha_Entrega, fechaActual) > 0) {
-            printf("El paquete no ha sido entregado\n");
-        } else {
-            printf("El paquete ha sido entregado\n");
-        }
-
-        printf("Paquete agregado exitosamente con ID: %d\n", paquete.id);
 
         fclose(AgregarPaquete);
 
@@ -386,7 +352,91 @@ void Borrar_Paquetes() {
 
 
 
-void Actualizar_Paquetes(){}
+void Actualizar_Paquetes() {
+    FILE *archivo, *temp;
+    Paquete paquete;
+    int id, opcion;
+    char nuevoNombre[50];
+    char nuevaDescripcion[100];
+
+    // Mostrar el historial de paquetes
+    archivo = fopen("archivo.txt", "r");
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        return;
+    }
+
+    printf("Historial de Paquetes:\n");
+    printf("------------------------------------------------------\n");
+
+    while (fscanf(archivo, "ID: %d\nNombre: %49[^\n]\nDescripcion: %99[^\n]\nOrigen: %49[^\n]\nDestino: %49[^\n]\nRemitente: %49[^\n]\nFecha de Entrega: %10[^\n]\n",
+                  &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
+        printf("ID: %d\n", paquete.id);
+        printf("Nombre: %s\n", paquete.nombre);
+        printf("Descripcion: %s\n", paquete.descripcion);
+        printf("Origen: %s\n", paquete.origen);
+        printf("Destino: %s\n", paquete.destino);
+        printf("Remitente: %s\n", paquete.remitente);
+        printf("Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
+        printf("---------------------------------------\n");
+    }
+
+    fclose(archivo);
+
+    // Preguntar el ID del paquete que desea actualizar
+    printf("Ingrese el ID del paquete que desea actualizar: ");
+    scanf("%d", &id);
+
+    // Preguntar si desea actualizar el nombre o la descripción
+    printf("Seleccione lo que desea actualizar:\n");
+    printf("1) Nombre\n");
+    printf("2) Descripcion\n");
+    scanf("%d", &opcion);
+
+    // Obtener el nuevo valor
+    if (opcion == 1) {
+        printf("Ingrese el nuevo nombre: ");
+        scanf(" %49[^\n]", nuevoNombre);
+    } else if (opcion == 2) {
+        printf("Ingrese la nueva descripcion: ");
+        scanf(" %99[^\n]", nuevaDescripcion);
+    } else {
+        printf("Opcion no valida.\n");
+        return;
+    }
+
+    // Actualizar el archivo
+    archivo = fopen("archivo.txt", "r");
+    temp = fopen("temp.txt", "w");
+
+    if (archivo == NULL || temp == NULL) {
+        printf("Error al abrir el archivo.\n");
+        return;
+    }
+
+    while (fscanf(archivo, "ID: %d\nNombre: %49[^\n]\nDescripcion: %99[^\n]\nOrigen: %49[^\n]\nDestino: %49[^\n]\nRemitente: %49[^\n]\nFecha de Entrega: %10[^\n]\n",
+                  &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
+        if (paquete.id == id) {
+            if (opcion == 1) {
+                strcpy(paquete.nombre, nuevoNombre);
+            } else if (opcion == 2) {
+                strcpy(paquete.descripcion, nuevaDescripcion);
+            }
+        }
+
+        fprintf(temp, "ID: %d\nNombre: %s\nDescripcion: %s\nOrigen: %s\nDestino: %s\nRemitente: %s\nFecha de Entrega: %s\n",
+                paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega);
+    }
+
+    fclose(archivo);
+    fclose(temp);
+
+    remove("archivo.txt");
+    rename("temp.txt", "archivo.txt");
+
+    printf("Paquete actualizado con exito.\n");
+}
+
 void Buscar_PaquetesID(){}
 void Buscar_PaquetesN(){}
 void Buscar_PaquetesR(){}
