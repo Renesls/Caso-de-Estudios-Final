@@ -21,8 +21,6 @@ extern void Historial_No();
 extern void Registrar_Usuario();
 extern void Cambiar_Password();
 
-Paquete* paquetes[100];
-int paqueteCount = 0;
 
 extern void Menu(){
     setlocale(LC_ALL, "");
