@@ -1,8 +1,3 @@
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <string.h>
 #include "Estructuras.hpp"
 #include "Funciones.hpp"
 
@@ -23,8 +18,6 @@ struct tm {
 
 */
 int main () {
-
-    setlocale(LC_ALL, "");
     MenuP();
 }
 

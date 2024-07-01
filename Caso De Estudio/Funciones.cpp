@@ -96,7 +96,7 @@ extern void Menu(){
             int Set;
             system("cls");
             cout << "Ajustes:\n";
-            cout << "1) Cambiar Password:\n";
+            cout << "1) Cambiar contraseña:\n";
             cout << "2) Info del app:\n";
             cout << "3) Salir";
             cin >> Set;
@@ -465,7 +465,7 @@ extern void Iniciar_Sesion(){
    {
     printf("Ingrese su usuario: ");
     scanf("%50s", usuario1);
-    printf("Ingrese su password: ");
+    printf("Ingrese su contraseña: ");
     scanf("%50s", password1);
 
     while (fscanf(ptrf, "%50s %50s %s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF){
@@ -569,9 +569,9 @@ extern void Cambiar_Password(){
     rename("temp.txt", "usuarios.txt");
 
     if (encontrado) {
-        printf("Password cambiada exitosamente\n");
+        printf("contraseña cambiada exitosamente\n");
     } else {
-        printf("Usuario o password incorrectos\n");
+        printf("Usuario o contraseña incorrectos\n");
     }
 }
 
@@ -586,8 +586,7 @@ extern void MenuP(){
     cout << "---------------------------\n"; 
     cout << "| Menu                    |\n";
     cout << "| 1) Iniciar Sesion       |\n";
-    cout << "| 2) Registrar Sesion     |\n";
-    cout << "| 3) Salir                |\n";
+    cout << "| 2) Salir                |\n";
     cout << "---------------------------\n"; 
     cin >> opc1;
     system("cls");
@@ -598,15 +597,12 @@ extern void MenuP(){
             Iniciar_Sesion();
             break;
         case 2:
-            Registrar_Usuario();
-            break;
-        case 3:
 
         default:
             break;
     }
     
-    } while (opc1 != 3);
+    } while (opc1 != 2);
     
 
 

@@ -113,7 +113,7 @@ extern void Menu(){
             int Set;
             system("cls");
             cout << "Ajustes:\n";
-            cout << "1) Cambiar Password:\n";
+            cout << "1) Cambiar contraseña:\n";
             cout << "2) Info del app:\n";
             cout << "3) Salir \n";
             cin >> Set;
@@ -123,7 +123,11 @@ extern void Menu(){
                 Cambiar_Password();
                 break;
             case 2:
-                
+                cout << "Aplicacion de paqueteria para Aduana\n";
+                cout << "Realizado por: \n";
+                cout << "Rene Nicolas Sandoval Lagos \n";
+                cout << "Carlos Alfredo Abea Martinez \n";
+                cout << "Joseph Moises Vargas Rodriguez: \n";
                 break;
             case 3:
                 Menu();
@@ -395,10 +399,15 @@ extern void Borrar_Paquetes() {
 extern void Historial_No() {
     FILE *archivo;
     Paquete paquete;
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    char fechaActual[11];
-    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+    time_t t = time(NULL); //declara una variable para almacenar el tiempo
+    struct tm tm = *localtime(&t); // un struct que contiene informacion sobre la fecha y la hora
+    char fechaActual[11]; //arreglo para almacenar la fecha con el formato "yyyy-mm-dd"
+    //snprintf se utiliza para reiniciar y almacenar una cadena en fechaactual
+    //sizeof me da el size del buffer
+    //tm_year + 1900 es para obtener el year actual 
+    //tm_mon + 1 Es para obtener el mes actual
+    //tm_mday Es para obtener el dia actual
+    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday); 
 
     archivo = fopen("archivo.txt", "r");
     if (archivo == NULL) {
@@ -489,7 +498,7 @@ extern void Iniciar_Sesion(){
    {
     printf("Ingrese su usuario: \n");
     scanf("%50s", usuario1);
-    printf("Ingrese su password: \n");
+    printf("Ingrese su contraseña: \n");
     scanf("%50s", password1);
 
     while (fscanf(ptrf, "%50s %50s %s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF){
@@ -506,7 +515,7 @@ extern void Iniciar_Sesion(){
 
   fclose(ptrf);
   if (!encontrado){
-    printf("Password o usuario incorrecto \n");
+    printf("contraseña o usuario incorrecto \n");
     system ("pause");
     system("cls");
     }
@@ -537,7 +546,7 @@ extern void Registrar_Usuario() {
         if (usuario_existe) {
             printf("El usuario ya existe y no debe ser guardado.\n");
         } else {
-            printf("Ingrese su password: \n");
+            printf("Ingrese su contraseña: \n");
             scanf("%50s", sesion.password);
             printf("Ingrese su nombre: \n");
             scanf("%50s", sesion.nombre);
@@ -571,11 +580,11 @@ extern void Cambiar_Password(){
         return;
     }
 
-    printf("Ingrese su usuario para cambiar password: \n");
+    printf("Ingrese su usuario para cambiar contraseña: \n");
     scanf("%50s", usuario1);
-    printf("Ingrese su password actual: \n");
+    printf("Ingrese su contraseña actual: \n");
     scanf("%50s", oldPassword);
-    printf("Ingrese su nuevo password: \n");
+    printf("Ingrese su nuevo contraseña: \n");
     scanf("%50s", newPassword);
 
     while (fscanf(ptrf, "%50s %50s %50s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF) {
@@ -593,9 +602,9 @@ extern void Cambiar_Password(){
     rename("temp.txt", "usuarios.txt");
 
     if (encontrado) {
-        printf("Password cambiada exitosamente\n");
+        printf("contraseña cambiada exitosamente\n");
     } else {
-        printf("Usuario o password incorrectos\n");
+        printf("Usuario o contraseña incorrectos\n");
     }
 }
 
@@ -610,8 +619,7 @@ extern void MenuP(){
     cout << "---------------------------\n"; 
     cout << "| Menu                    |\n";
     cout << "| 1) Iniciar Sesion       |\n";
-    cout << "| 2) Registrar Sesion     |\n";
-    cout << "| 3) Salir                |\n";
+    cout << "| 2) Salir                |\n";
     cout << "---------------------------\n"; 
     cin >> opc1;
     system("cls");
@@ -622,15 +630,12 @@ extern void MenuP(){
             Iniciar_Sesion();
             break;
         case 2:
-            Registrar_Usuario();
-            break;
-        case 3:
 
         default:
             break;
     }
     
-    } while (opc1 != 3);
+    } while (opc1 != 2);
     
 
 
@@ -650,7 +655,7 @@ extern void Buscar_PaquetesID() {
     Paquete paquete;
     bool encontrado = false;
 
-    while (fscanf(archivo, "ID: %d\nNombre: %49[^\n]\nDescripcion: %99[^\n]\nOrigen: %49[^\n]\nDestino: %49[^\n]\nRemitente: %49[^\n]\nFecha de Entrega: %10[^\n]\n",
+    while (fscanf(archivo, "ID: %d\nNombre: %50[^\n]\nDescripcion: %100[^\n]\nOrigen: %50[^\n]\nDestino: %50[^\n]\nRemitente: %50[^\n]\nFecha de Entrega: %11[^\n]\n",
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
         if (paquete.id == idBuscar) {
             printf("ID: %d\n", paquete.id);
