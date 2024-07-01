@@ -224,6 +224,7 @@ void Agregar_Paquetes() {
         //fgets lo utilizamos para leer las entradas del paquete
         //fprintf para escribir cada campo del paquete en el archivo.txt
         
+        
 
         printf("Ingrese el nombre del paquete: \n");
         getchar(); // Usar getchar() para consumir y descartar el carácter de nueva línea residual en el búfer
