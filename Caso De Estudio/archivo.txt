@@ -1,0 +1,14 @@
+ID: 1
+Nombre: Ropa pa la USA
+Descripcion: Ropa traida desde la YUMA pa mi family
+Origen: YUSA
+Destino: Leon, Nicaragua
+Remitente: Juan Perez Sandoval
+Fecha de Entrega: 2024-07-02
+ID: 2
+Nombre: Computadora Portatil
+Descripcion: Computadora con componentes pesados
+Origen: Inglaterra
+Destino: Managua, Nicaragua
+Remitente: Rene Sandoval Lagos
+Fecha de Entrega: 2024-07-01
