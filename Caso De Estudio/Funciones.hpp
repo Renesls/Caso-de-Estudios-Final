@@ -1,10 +1,12 @@
-#include "Estructuras.hpp"
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <string.h>
+#include "Estructuras.hpp" //Libreria creada para agregar las estructuras que tenemos
+#include <iostream> //es para utilizar lo que es el cout y el cin
+#include <stdio.h> //usado para imprimir salidas de datos
+#include <stdlib.h> //esta libreria define las funciones numericas de conversion
+#include <time.h> //libreria de tiempo para revisar el tiempo actual
+#include <string.h> // nos ayuda a manipular los strings y los arreglos
 using namespace std;
+
+
 
 #ifndef FUNCIONES_H
 #define FUNCIONES_H
@@ -21,6 +23,7 @@ extern void Historial_No();
 extern void Registrar_Usuario();
 extern void Cambiar_Password();
 
+// Funcion de menu principal en donde todas las funciones se pueden utilizar
 
 extern void Menu(){
     setlocale(LC_ALL, "");
@@ -146,6 +149,8 @@ extern void Menu(){
     }
 }
 
+
+//Funcion del crud para agregar paquetes utilizando punteros de archivos 
 extern void Agregar_Paquetes() {
     // declarar una variable para utilizar el struct de Paquete
     Paquete paquete; 
@@ -162,20 +167,25 @@ extern void Agregar_Paquetes() {
 
     paquete.id = paquete.lastId + 1; 
 
-    AgregarPaquete = fopen("archivo.txt", "a"); 
-    if (AgregarPaquete == NULL) {
-        printf("\nEl archivo no pudo ser abierto/creado\n");
+
+    AgregarPaquete = fopen("archivo.txt", "a");     //mandar a crear el archivo para add los datos del paquete
+    if (AgregarPaquete == NULL) {  
+        printf("\nEl archivo no pudo ser abierto/creado\n"); // si no funciona entonces mandara este mensaje
     } else {
+
         //fgets lo utilizamos para leer las entradas del paquete
         //fprintf para escribir cada campo del paquete en el archivo.txt
         
 
         printf("Ingrese el nombre del paquete: \n");
-        getchar(); // Usar getchar() para consumir y descartar el carácter de nueva línea residual en el búfer
-        fgets(paquete.nombre, sizeof(paquete.nombre), stdin);
-        paquete.nombre[strcspn(paquete.nombre, "\n")] = 0;
-        fprintf(AgregarPaquete, "ID: %d\nNombre: %s\n", paquete.id, paquete.nombre);
-        
+        getchar(); // Usar getchar() Esta línea lee un solo carácter del teclado y lo descarta. 
+        fgets(paquete.nombre, sizeof(paquete.nombre), stdin); //lee una cadena en el argumento stream de entrada y la almacena en str
+        paquete.nombre[strcspn(paquete.nombre, "\n")] = 0; 
+        /*fgets captura el "Enter" entonces lo que hace es reemplazarlo con un caracter nulo para que no haga el salto*/
+        fprintf(AgregarPaquete, "ID: %d\nNombre: %s\n", paquete.id, paquete.nombre); 
+        /*AgregarPaquete es el archivo donde se guardan estos datos, paquete.id es el 
+        número de identificación del paquete, y paquete.nombre es el nombre que el usuario ingresó.
+        */
         printf("Ingrese la descripcion del paquete: \n");
         fgets(paquete.descripcion, sizeof(paquete.descripcion), stdin);
         paquete.descripcion[strcspn(paquete.descripcion, "\n")] = 0;
@@ -201,10 +211,15 @@ extern void Agregar_Paquetes() {
         paquete.Fecha_Entrega[strcspn(paquete.Fecha_Entrega, "\n")] = 0;
         fprintf(AgregarPaquete, "Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
        
-        time_t t = time(NULL);
-        struct tm tm = *localtime(&t);
-        char fechaActual[11];
-        snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+        time_t t = time(NULL); //declara una variable para almacenar el tiempo
+        struct tm tm = *localtime(&t); // un struct que contiene informacion sobre la fecha y la hora
+        char fechaActual[11]; //arreglo para almacenar la fecha con el formato "yyyy-mm-dd"
+        //snprintf se utiliza para reiniciar y almacenar una cadena en fechaactual
+        //sizeof me da el size del buffer
+        //tm_year + 1900 es para obtener el year actual 
+        //tm_mon + 1 Es para obtener el mes actual
+        //tm_mday Es para obtener el dia actual
+        snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday); 
 
 
         fclose(AgregarPaquete);
@@ -227,16 +242,17 @@ extern void Actualizar_Paquetes() {
     char nuevoNombre[50];
     char nuevaDescripcion[100];
 
-    // Mostrar el historial de paquetes
     archivo = fopen("archivo.txt", "r");
     if (archivo == NULL) {
         printf("Error al abrir el archivo.\n");
         return;
     }
 
+
     printf("Historial de Paquetes:\n");
     printf("------------------------------------------------------\n");
-
+    
+    //este while va al txt y manda a imprimir cada paquete en bloques para que el usuario sepa que paquete desea actualizar
     while (fscanf(archivo, "ID: %d\nNombre: %49[^\n]\nDescripcion: %99[^\n]\nOrigen: %49[^\n]\nDestino: %49[^\n]\nRemitente: %49[^\n]\nFecha de Entrega: %10[^\n]\n",
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
         printf("ID: %d\n", paquete.id);
@@ -251,42 +267,44 @@ extern void Actualizar_Paquetes() {
 
     fclose(archivo);
 
-    // Preguntar el ID del paquete que desea actualizar
+    // se le pregunta al usuaio que ID desea actualizar
     printf("Ingrese el ID del paquete que desea actualizar: ");
     scanf("%d", &id);
 
-    // Preguntar si desea actualizar el nombre o la descripción
+    // se le pregunta al usuaio si desea actualizar el nombre o la descripcion(solo le di 2 opciones)
     printf("Seleccione lo que desea actualizar:\n");
     printf("1) Nombre\n");
     printf("2) Descripcion\n");
     scanf("%d", &opcion);
-
-    // Obtener el nuevo valor
-    if (opcion == 1) {
-        printf("Ingrese el nuevo nombre: ");
-        scanf(" %49[^\n]", nuevoNombre);
-    } else if (opcion == 2) {
-        printf("Ingrese la nueva descripcion: ");
-        scanf(" %99[^\n]", nuevaDescripcion);
-    } else {
-        printf("Opcion no valida.\n");
-        return;
+    while (opcion < 3)
+    {
+        if (opcion == 1) {
+            printf("Ingrese el nuevo nombre: ");
+            scanf(" %49[^\n]", nuevoNombre);
+        } else if (opcion == 2) {
+            printf("Ingrese la nueva descripcion: ");
+            scanf(" %99[^\n]", nuevaDescripcion);
+        } else {
+            printf("No debiste haber hecho eso (╯°□°）╯︵ ┻━┻.\n");
+            
+        }
     }
+    
 
-    // Actualizar el archivo
     archivo = fopen("archivo.txt", "r");
-    temp = fopen("temp.txt", "w");
+    temp = fopen("temp.txt", "w"); // este es el archivo temporal que utilizaremos para actualizar
 
     if (archivo == NULL || temp == NULL) {
         printf("Error al abrir el archivo.\n");
         return;
     }
-
+    /*este while se utiliza para cambiar el nombre o la descripcion de la persona dependiendo de lo que eligio, 
+    busca el ID y cuando lo encuentra con el strcpy cambia el nombre o la descripcion*/
     while (fscanf(archivo, "ID: %d\nNombre: %49[^\n]\nDescripcion: %99[^\n]\nOrigen: %49[^\n]\nDestino: %49[^\n]\nRemitente: %49[^\n]\nFecha de Entrega: %10[^\n]\n",
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
-        if (paquete.id == id) {
+        if (paquete.id == id) { //si encuentra el id entonces utilizara strcpy para cambiarlo
             if (opcion == 1) {
-                strcpy(paquete.nombre, nuevoNombre);
+                strcpy(paquete.nombre, nuevoNombre); //La función strcpy copia la cadena de la segunda variable y se lo da a la primera variable para poder actualizar
             } else if (opcion == 2) {
                 strcpy(paquete.descripcion, nuevaDescripcion);
             }
@@ -299,8 +317,8 @@ extern void Actualizar_Paquetes() {
     fclose(archivo);
     fclose(temp);
 
-    remove("archivo.txt");
-    rename("temp.txt", "archivo.txt");
+    remove("archivo.txt"); //eliminamos archivo.txt ya que no esta actualizado
+    rename("temp.txt", "archivo.txt"); //renombramos temp.txt ya que es el que esta actualizado
 
     printf("Paquete actualizado con exito.\n");
 
@@ -317,10 +335,15 @@ extern void Borrar_Paquetes() {
     FILE *temporal;
     Paquete paquete;
 
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    char fechaActual[11];
-    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+    time_t t = time(NULL); //declara una variable para almacenar el tiempo
+    struct tm tm = *localtime(&t); // un struct que contiene informacion sobre la fecha y la hora
+    char fechaActual[11]; //arreglo para almacenar la fecha con el formato "yyyy-mm-dd"
+    //snprintf se utiliza para reiniciar y almacenar una cadena en fechaactual
+    //sizeof me da el size del buffer
+    //tm_year + 1900 es para obtener el year actual 
+    //tm_mon + 1 Es para obtener el mes actual
+    //tm_mday Es para obtener el dia actual
+    snprintf(fechaActual, sizeof(fechaActual), "%d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday); 
 
     archivo = fopen("archivo.txt", "r");
     temporal = fopen("temp.txt", "w");
@@ -333,7 +356,8 @@ extern void Borrar_Paquetes() {
     // Mostrar lista de paquetes
     printf("Lista de paquetes:\n");
     printf("---------------------------------------\n");
-
+    
+    //un while de historial de paquetes para que sepa que paquete desea eliminar
     while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
         printf("ID: %d\n", paquete.id);
@@ -361,13 +385,14 @@ extern void Borrar_Paquetes() {
     printf("¿Está seguro de eliminar el paquete con ID %d? (s/n): ", idBorrar);
     cin >> confirmacion;
 
-
+    //si el usuario no confirma esto no podra eliminar ese archivo
     if (confirmacion == 's' || confirmacion == 'S') {
         archivo = fopen("archivo.txt", "r");
 
+        // este bucle es para buscar todos los paquetes excepto el paquete con id que especifico el usuario
         while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                       &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
-            if (paquete.id != idBorrar) {
+            if (paquete.id != idBorrar) { //agrega al archivo temporal todos los paquetes que no sean el paquete que puso el usuario esto para que en el archivo no aparezca y se elimina archivo.txt y renombre temp.txt
                 fprintf(temporal, "ID: %d\n", paquete.id);
                 fprintf(temporal, "Nombre: %s\n", paquete.nombre);
                 fprintf(temporal, "Descripcion: %s\n", paquete.descripcion);
@@ -416,9 +441,10 @@ extern void Historial_No() {
     printf("Paquetes no entregados:\n");
     printf("----------------------------------------------------\n");
 
+    //este bucle sirve para mandar a imprimi los paquetes en los cuales aun no han sido entregados
     while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
-        if (strcmp(paquete.Fecha_Entrega, fechaActual) > 0) {
+        if (strcmp(paquete.Fecha_Entrega, fechaActual) > 0) {// compara las fechas y verifica si la fecha de entrega del paquete es posterior a la fecha actual
             printf("ID: %d\n", paquete.id);
             printf("Nombre: %s\n", paquete.nombre);
             printf("Descripcion: %s\n", paquete.descripcion);
@@ -461,10 +487,10 @@ extern void Historial_Si() {
     printf("Paquetes entregados:\n");
     printf("------------------------------------------------------\n");
 
+    //este bucle sirve para mandar a imprimi los paquetes en los cuales ya han sido entregados
     while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
-        
-        if (strcmp(paquete.Fecha_Entrega, fechaActual) <= 0) {
+        if (strcmp(paquete.Fecha_Entrega, fechaActual) <= 0) { // compara las fechas y verifica si la fecha de entrega del paquete es anterior o igual a la fecha actual
             printf("ID: %d\n", paquete.id);
             printf("Nombre: %s\n", paquete.nombre);
             printf("Descripcion: %s\n", paquete.descripcion);
@@ -499,6 +525,7 @@ extern void Iniciar_Sesion(){
     printf("Ingrese su contraseña: \n");
     scanf("%50s", password1);
 
+    //si encuentra al usuario entonces podra entrar al menu principal si no negra
     while (fscanf(ptrf, "%50s %50s %s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF){
       if(strcmp(usuario1, sesion.usuario) == 0 && strcmp(password1, sesion.password) == 0){
           printf ("Inicio de sesion exitoso\n");
@@ -521,6 +548,8 @@ extern void Iniciar_Sesion(){
 
    
 }
+
+//Registrar un nuevo usuario
 extern void Registrar_Usuario() {
     Sesion sesion;
     FILE *ptrf;
@@ -533,7 +562,7 @@ extern void Registrar_Usuario() {
         printf("Ingrese un nuevo usuario: \n");
         scanf("%50s", sesion.usuario);
 
-        rewind(ptrf); //funciona para regresar al inicio del archivo para que lea todos los archivos(Creo xd)
+        rewind(ptrf); //sirve para regresar al inicio del archivo para que lea todos los archivos(Creo xd)
         while (fscanf(ptrf, "%50s", usuario1) != EOF) {
             fscanf(ptrf, "%*s %*s %*d");  
             if (strcmp(sesion.usuario, usuario1) == 0) {
@@ -570,6 +599,7 @@ extern void Cambiar_Password(){
     FILE *ptrf;
     FILE *tempf;
 
+
     ptrf = fopen("usuarios.txt", "r");
     tempf = fopen("temp.txt", "w");
 
@@ -577,35 +607,49 @@ extern void Cambiar_Password(){
         printf("\nEl archivo no pudo ser abierto\n");
         return;
     }
-
+    //Ingresa el usuario que desea cambiar la password
     printf("Ingrese su usuario para cambiar contraseña: \n");
     scanf("%50s", usuario1);
+    //ingresa la password anterior 
     printf("Ingrese su contraseña actual: \n");
     scanf("%50s", oldPassword);
     printf("Ingrese su nuevo contraseña: \n");
     scanf("%50s", newPassword);
 
+    /*este while entra al txt y si encuentra un usuario con la misma password y nombre de 
+    usuario entonces cambiara su password si no pus solo le mandara un mensaje de que no se pudo y ya*/
+    
     while (fscanf(ptrf, "%50s %50s %50s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF) {
         if (strcmp(sesion.usuario, usuario1) == 0 && strcmp(sesion.password, oldPassword) == 0) {
             strcpy(sesion.password, newPassword);
             encontrado = true;
+            fprintf(tempf, "%s %s %s %d\n", sesion.usuario, sesion.password, sesion.nombre, sesion.edad);
+
         }
-        fprintf(tempf, "%s %s %s %d\n", sesion.usuario, sesion.password, sesion.nombre, sesion.edad);
+        else{
+            printf("Usuario o password incorrectas: \n");
+
+        }
+    
     }
 
-    fclose(ptrf);
-    fclose(tempf);
     
     remove("usuarios.txt");
     rename("temp.txt", "usuarios.txt");
+    fclose(ptrf);
+    fclose(tempf);
+
 
     if (encontrado) {
         printf("contraseña cambiada exitosamente\n");
     } else {
         printf("Usuario o contraseña incorrectos\n");
     }
+    system("pause");
 }
 
+
+//Funcion del menu de inicio de sesion y pus o inicias sesion o te me vas a dormir
 extern void MenuP(){
     setlocale(LC_ALL, "");
 
@@ -628,7 +672,8 @@ extern void MenuP(){
             Iniciar_Sesion();
             break;
         case 2:
-
+            cout << "Saliendo Del Programa \n";
+            cout << "Tenga Bonito Dia \n";
         default:
             break;
     }
@@ -640,6 +685,9 @@ extern void MenuP(){
 }
 
 extern void Buscar_PaquetesID() {
+    
+    Paquete paquete;
+    bool encontrado = false;
     FILE* archivo = fopen("archivo.txt", "r");
     if (!archivo) {
         printf("No se pudo abrir el archivo de paquetes.\n");
@@ -650,9 +698,8 @@ extern void Buscar_PaquetesID() {
     printf("Ingrese el ID del paquete que desea buscar: \n");
     scanf("%d", &idBuscar);
 
-    Paquete paquete;
-    bool encontrado = false;
 
+    //Este while sirve para encontrar al remitente justamente con el mismo nombre si lo encuentra mandara a imprimir ese dato en la consola
     while (fscanf(archivo, "ID: %d\nNombre: %50[^\n]\nDescripcion: %100[^\n]\nOrigen: %50[^\n]\nDestino: %50[^\n]\nRemitente: %50[^\n]\nFecha de Entrega: %11[^\n]\n",
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
         if (paquete.id == idBuscar) {
@@ -678,21 +725,23 @@ extern void Buscar_PaquetesID() {
 }
 
 extern void Buscar_PaquetesN() {
+    Paquete paquete;
+    bool encontrado = false;
     FILE* archivo = fopen("archivo.txt", "r");
     if (!archivo) {
         printf("No se pudo abrir el archivo de paquetes.\n");
         return;
     }
 
-    char nombreBuscar[50];
+    char nombreBuscar[50];//es para el nombre
     printf("Ingrese el nombre del paquete que desea buscar: \n");
     getchar();  // Para consumir el salto de línea dejado por scanf
     fgets(nombreBuscar, sizeof(nombreBuscar), stdin);
     nombreBuscar[strcspn(nombreBuscar, "\n")] = 0;  // Eliminar el salto de línea
 
-    Paquete paquete;
-    bool encontrado = false;
 
+
+    //Este while sirve para encontrar al remitente justamente con el mismo nombre si lo encuentra mandara a imprimir ese dato en la consola
     while (fscanf(archivo, "ID: %d\nNombre: %49[^\n]\nDescripcion: %99[^\n]\nOrigen: %49[^\n]\nDestino: %49[^\n]\nRemitente: %49[^\n]\nFecha de Entrega: %10[^\n]\n",
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
         if (strcmp(paquete.nombre, nombreBuscar) == 0) {
@@ -718,21 +767,24 @@ extern void Buscar_PaquetesN() {
 }
 
 extern void Buscar_PaquetesR() {
+    Paquete paquete;
+    bool encontrado = false;
+
+    //mandamos a leer el archivo.txt para eso es la r de "read"
     FILE* archivo = fopen("archivo.txt", "r");
     if (!archivo) {
         printf("No se pudo abrir el archivo de paquetes.\n");
         return;
     }
-
-    char remitenteBuscar[50];
+    
+    char remitenteBuscar[50]; //variable para saber que remitente va a ser
     printf("Ingrese el remitente del paquete que desea buscar: \n");
     getchar();  // Para consumir el salto de línea dejado por scanf
     fgets(remitenteBuscar, sizeof(remitenteBuscar), stdin);
     remitenteBuscar[strcspn(remitenteBuscar, "\n")] = 0;  // Eliminar el salto de línea
 
-    Paquete paquete;
-    bool encontrado = false;
 
+    //Este while sirve para encontrar al remitente justamente con el mismo remitente si lo encuentra mandara a imprimir ese dato en la consola
     while (fscanf(archivo, "ID: %d\nNombre: %49[^\n]\nDescripcion: %99[^\n]\nOrigen: %49[^\n]\nDestino: %49[^\n]\nRemitente: %49[^\n]\nFecha de Entrega: %10[^\n]\n",
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
         if (strcmp(paquete.remitente, remitenteBuscar) == 0) {
@@ -744,7 +796,6 @@ extern void Buscar_PaquetesR() {
             printf("Remitente: %s\n", paquete.remitente);
             printf("Fecha de Entrega: %s\n", paquete.Fecha_Entrega);
             encontrado = true;
-            break;
         }
     }
 
