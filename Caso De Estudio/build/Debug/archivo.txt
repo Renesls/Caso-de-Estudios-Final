@@ -1,0 +1,14 @@
+ID: 2
+Nombre: Portatilx2
+Descripcion: dwjaiodjwaiod
+Origen: Inglaterra
+Destino: Managua, Nicaragua
+Remitente: Rene Sandoval Lagos
+Fecha de Entrega: 2024-07-01
+ID: 4
+Nombre: Pepitas
+Descripcion: Accesorios para maquillaje
+Origen: Managua,Nicaragua
+Destino: Leon,Managua
+Remitente: Carlos Abea
+Fecha de Entrega: 2024-07-02

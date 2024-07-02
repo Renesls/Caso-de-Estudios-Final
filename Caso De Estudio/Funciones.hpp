@@ -66,8 +66,8 @@ extern void Menu(){
             cout << "3) Paquete Por Remitente\n";
             cout << "4) Salir \n";
             cin >> bsq;
-            switch (bsq)
-            {
+
+            switch (bsq){
             case 1:
                 Buscar_PaquetesID();
                 break;
@@ -83,7 +83,7 @@ extern void Menu(){
             default:
                 break;
             }
-
+            break;
 
         case 5:
             int Hist;
@@ -103,10 +103,11 @@ extern void Menu(){
                 break;
             case 3:
                 Menu();
+                break;
             default:
                 break;
             }
-
+            break;
 
         case 6:
             Registrar_Usuario();
@@ -131,13 +132,17 @@ extern void Menu(){
                 cout << "Rene Nicolas Sandoval Lagos \n";
                 cout << "Carlos Alfredo Abea Martinez \n";
                 cout << "Joseph Moises Vargas Rodriguez: \n";
+                system("pause");
+                system("cls");
                 break;
             case 3:
                 Menu();
+                break;
              
             default:
                 break;
             }
+            break;
 
         case 8:
             cout << "Saliendo Del Programa";
@@ -148,6 +153,7 @@ extern void Menu(){
         default:
             break;
         }
+        break;
     }
 }
 

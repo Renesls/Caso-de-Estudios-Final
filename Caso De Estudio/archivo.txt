@@ -6,8 +6,8 @@ Destino: Managua, Nicaragua
 Remitente: Rene Sandoval Lagos
 Fecha de Entrega: 2024-07-01
 ID: 4
-Nombre: Pepitas
-Descripcion: Accesorios para maquillaje
+Nombre: Jose
+Descripcion: costemticos
 Origen: Managua,Nicaragua
 Destino: Leon,Managua
 Remitente: Carlos Abea
