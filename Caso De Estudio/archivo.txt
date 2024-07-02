@@ -1,6 +1,6 @@
 ID: 2
-Nombre: Computadora Portatil
-Descripcion: Computadora con componentes pesados
+Nombre: Portatilx2
+Descripcion: dwjaiodjwaiod
 Origen: Inglaterra
 Destino: Managua, Nicaragua
 Remitente: Rene Sandoval Lagos

@@ -54,6 +54,8 @@ extern void Menu(){
             break;
         case 3:
             Actualizar_Paquetes();
+            break;
+
         case 4:
             
             int bsq;
@@ -81,7 +83,7 @@ extern void Menu(){
             default:
                 break;
             }
-            break;
+
 
         case 5:
             int Hist;
@@ -101,14 +103,14 @@ extern void Menu(){
                 break;
             case 3:
                 Menu();
-                break;    
             default:
                 break;
             }
-            break;
+
 
         case 6:
             Registrar_Usuario();
+            break;
 
         case 7:
             int Set;
@@ -132,11 +134,11 @@ extern void Menu(){
                 break;
             case 3:
                 Menu();
-                break;                
+             
             default:
                 break;
             }
-            break;
+
         case 8:
             cout << "Saliendo Del Programa";
             cout << "Tenga Bonito Dia";
@@ -272,23 +274,19 @@ extern void Actualizar_Paquetes() {
     scanf("%d", &id);
 
     // se le pregunta al usuaio si desea actualizar el nombre o la descripcion(solo le di 2 opciones)
+
     printf("Seleccione lo que desea actualizar:\n");
     printf("1) Nombre\n");
     printf("2) Descripcion\n");
     scanf("%d", &opcion);
-    while (opcion < 3)
-    {
-        if (opcion == 1) {
-            printf("Ingrese el nuevo nombre: ");
-            scanf(" %49[^\n]", nuevoNombre);
-        } else if (opcion == 2) {
-            printf("Ingrese la nueva descripcion: ");
-            scanf(" %99[^\n]", nuevaDescripcion);
-        } else {
-            printf("No debiste haber hecho eso (╯°□°）╯︵ ┻━┻.\n");
-            
-        }
-    }
+
+    if (opcion == 1) {
+        printf("Ingrese el nuevo nombre: ");
+        scanf(" %49[^\n]", nuevoNombre);
+    } else if (opcion == 2) {
+        printf("Ingrese la nueva descripcion: ");
+        scanf(" %99[^\n]", nuevaDescripcion);
+    } 
     
 
     archivo = fopen("archivo.txt", "r");
@@ -588,8 +586,10 @@ extern void Registrar_Usuario() {
     }
 
     system("pause");
+    system("cls");
 }
 
+//Funcion para cambiar la password
 extern void Cambiar_Password(){
     char usuario1[50];
     char oldPassword[50];
@@ -599,7 +599,6 @@ extern void Cambiar_Password(){
     FILE *ptrf;
     FILE *tempf;
 
-
     ptrf = fopen("usuarios.txt", "r");
     tempf = fopen("temp.txt", "w");
 
@@ -607,47 +606,43 @@ extern void Cambiar_Password(){
         printf("\nEl archivo no pudo ser abierto\n");
         return;
     }
+    
     //Ingresa el usuario que desea cambiar la password
     printf("Ingrese su usuario para cambiar contraseña: \n");
-    scanf("%50s", usuario1);
+    scanf("%s", usuario1);
+    
     //ingresa la password anterior 
     printf("Ingrese su contraseña actual: \n");
-    scanf("%50s", oldPassword);
+    scanf("%s", oldPassword);
     printf("Ingrese su nuevo contraseña: \n");
-    scanf("%50s", newPassword);
+    scanf("%s", newPassword);
 
     /*este while entra al txt y si encuentra un usuario con la misma password y nombre de 
     usuario entonces cambiara su password si no pus solo le mandara un mensaje de que no se pudo y ya*/
-    
-    while (fscanf(ptrf, "%50s %50s %50s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF) {
+    while (fscanf(ptrf, "%s %s %s %d", sesion.usuario, sesion.password, sesion.nombre, &sesion.edad) != EOF) {
         if (strcmp(sesion.usuario, usuario1) == 0 && strcmp(sesion.password, oldPassword) == 0) {
             strcpy(sesion.password, newPassword);
             encontrado = true;
-            fprintf(tempf, "%s %s %s %d\n", sesion.usuario, sesion.password, sesion.nombre, sesion.edad);
-
         }
-        else{
-            printf("Usuario o password incorrectas: \n");
-
-        }
-    
+        fprintf(tempf, "%s %s %s %d\n", sesion.usuario, sesion.password, sesion.nombre, sesion.edad);
     }
 
-    
-    remove("usuarios.txt");
-    rename("temp.txt", "usuarios.txt");
     fclose(ptrf);
     fclose(tempf);
-
-
+    remove("usuarios.txt");
+    rename("temp.txt", "usuarios.txt"); 
+    
     if (encontrado) {
-        printf("contraseña cambiada exitosamente\n");
+        printf("Contraseña cambiada exitosamente\n");
     } else {
         printf("Usuario o contraseña incorrectos\n");
-    }
-    system("pause");
-}
 
+    }
+
+    system("pause");
+    system("cls");
+    Menu();
+}
 
 //Funcion del menu de inicio de sesion y pus o inicias sesion o te me vas a dormir
 extern void MenuP(){
@@ -674,6 +669,7 @@ extern void MenuP(){
         case 2:
             cout << "Saliendo Del Programa \n";
             cout << "Tenga Bonito Dia \n";
+            break;
         default:
             break;
     }
