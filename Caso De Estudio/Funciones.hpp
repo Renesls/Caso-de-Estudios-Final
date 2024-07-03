@@ -24,7 +24,6 @@ extern void Registrar_Usuario();
 extern void Cambiar_Password();
 
 // Funcion de menu principal en donde todas las funciones se pueden utilizar
-
 extern void Menu(){
     setlocale(LC_ALL, "");
     int opc;
@@ -47,17 +46,19 @@ extern void Menu(){
         switch (opc)
         {
         case 1:
+            system("cls");
             Agregar_Paquetes();
             break;
         case 2:
+            system("cls");
             Borrar_Paquetes();
             break;
         case 3:
+            system("cls");
             Actualizar_Paquetes();
             break;
 
         case 4:
-            
             int bsq;
             system("cls");
             cout << "Desea Buscar el Paquete por:\n";
@@ -69,18 +70,23 @@ extern void Menu(){
 
             switch (bsq){
             case 1:
+                system("cls");
                 Buscar_PaquetesID();
                 break;
             case 2:
+                system("cls");
                 Buscar_PaquetesN();
                 break;
             case 3:
+                system("cls");
                 Buscar_PaquetesR();
                 break;
             case 4:
+                system("cls");
                 Menu();
                 break;                
             default:
+            
                 break;
             }
             break;
@@ -96,12 +102,15 @@ extern void Menu(){
             switch (Hist)
             {
             case 1:
+                system("cls");
                 Historial_Si();
                 break;
             case 2:
+                system("cls");
                 Historial_No();
                 break;
             case 3:
+                system("cls");
                 Menu();
                 break;
             default:
@@ -110,6 +119,7 @@ extern void Menu(){
             break;
 
         case 6:
+            system("cls");
             Registrar_Usuario();
             break;
 
@@ -124,6 +134,7 @@ extern void Menu(){
             switch (Set)
             {
             case 1:
+                system("cls");
                 Cambiar_Password();
                 break;
             case 2:
@@ -134,6 +145,7 @@ extern void Menu(){
                 cout << "Joseph Moises Vargas Rodriguez: \n";
                 system("pause");
                 system("cls");
+                Menu();
                 break;
             case 3:
                 Menu();
@@ -145,8 +157,8 @@ extern void Menu(){
             break;
 
         case 8:
-            cout << "Saliendo Del Programa";
-            cout << "Tenga Bonito Dia";
+            cout << "Saliendo Del Programa \n";
+            cout << "Tenga Bonito Dia \n";
 
             exit(0);
             break;                        
@@ -464,10 +476,13 @@ extern void Historial_No() {
     fclose(archivo);
     system("pause");
     system("cls");
+    Menu();
+
 }
 
 
-extern void Historial_Si() {
+
+void Historial_Si() {
     FILE *archivo;
     Paquete paquete;
     time_t t = time(NULL); //declara una variable para almacenar el tiempo
@@ -491,10 +506,10 @@ extern void Historial_Si() {
     printf("Paquetes entregados:\n");
     printf("------------------------------------------------------\n");
 
-    //este bucle sirve para mandar a imprimi los paquetes en los cuales ya han sido entregados
     while (fscanf(archivo, "ID: %d\nNombre: %[^\n]\nDescripcion: %[^\n]\nOrigen: %[^\n]\nDestino: %[^\n]\nRemitente: %[^\n]\nFecha de Entrega: %[^\n]\n", 
                   &paquete.id, paquete.nombre, paquete.descripcion, paquete.origen, paquete.destino, paquete.remitente, paquete.Fecha_Entrega) != EOF) {
-        if (strcmp(paquete.Fecha_Entrega, fechaActual) <= 0) { // compara las fechas y verifica si la fecha de entrega del paquete es anterior o igual a la fecha actual
+        
+        if (strcmp(paquete.Fecha_Entrega, fechaActual) <= 0) {
             printf("ID: %d\n", paquete.id);
             printf("Nombre: %s\n", paquete.nombre);
             printf("Descripcion: %s\n", paquete.descripcion);
@@ -509,6 +524,7 @@ extern void Historial_Si() {
     fclose(archivo);
     system("pause");
     system("cls");
+    Menu();
 }
 
 extern void Iniciar_Sesion(){
